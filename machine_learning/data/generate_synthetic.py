@@ -44,6 +44,7 @@ def wylicz_emeryture(
     rok_rozpoczecia: int,
     rok_zakonczenia: int,
     kapital_poczatkowy: float = 0.0,
+    suma_wplaconych_skladek: float = 0.0,
     wiek: Optional[int] = None,  # niewykorzystywane w tym uproszczeniu
 ) -> dict:
     """
@@ -66,6 +67,7 @@ def wylicz_emeryture(
 
     konto = 0.0
     subkonto = 0.0
+    suma_skladek = suma_wplaconych_skladek
 
     # Używamy domyślnie podziału: konto = 9,76% - OFE - subkonto; subkonto = 4,38%
     for rok in range(rok_rozpoczecia, rok_zakonczenia + 1):
@@ -82,13 +84,14 @@ def wylicz_emeryture(
         podstawa = min(wynagrodzenie_brutto, max_podstawa)
 
         # Składka roczna = podstawa * 12 * odpowiednia stopa
-        skladka_konto = podstawa * 12 * ((params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika'] + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100)
-        skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100)
-        # OFE nie uwzględniamy, bo środki trafiają potem na subkonto
+    skladka_konto = podstawa * 12 * ((params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika'] + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100)
+    skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100)
+    suma_skladek += skladka_konto + skladka_subkonto
+    # OFE nie uwzględniamy, bo środki trafiają potem na subkonto
 
-        # Waloryzacja składek i sumowanie
-        konto = (konto + skladka_konto) * waloryzacja_konto
-        subkonto = (subkonto + skladka_subkonto) * waloryzacja_subkonto
+    # Waloryzacja składek i sumowanie
+    konto = (konto + skladka_konto) * waloryzacja_konto
+    subkonto = (subkonto + skladka_subkonto) * waloryzacja_subkonto
 
     # Dodajemy kapitał początkowy (waloryzowany)
     # Przyjmujemy, że waloryzacja kapitału = waloryzacja ostatniego roku pracy
@@ -115,24 +118,57 @@ def wylicz_emeryture(
 
     return {
         "emerytura_nominalna": emerytura_nominalna,
-        "emerytura_urealniona": emerytura_urealniona,
-        "stopa_zastapienia": stopa_zastapienia,
-        "minimalna_emerytura": min_emerytura,
-        "inflacja_cum": inflacja_cum,
-        "konto": konto,
-        "subkonto": subkonto,
-        "S": S
+        # "emerytura_urealniona": emerytura_urealniona,
+        # "stopa_zastapienia": stopa_zastapienia,
+        # "minimalna_emerytura": min_emerytura,
+        # "inflacja_cum": inflacja_cum,
+        # "konto": konto,
+        # "subkonto": subkonto,
+        # "S": S
     }
 
 # PRZYKŁAD UŻYCIA:
 if __name__ == "__main__":
+    import numpy as np
     df = load_parameters("Parametry-III 2025 - parametry roczne.csv")
-    wynik = wylicz_emeryture(
-        df,
-        plec="m",
-        wynagrodzenie_brutto=8000,
-        rok_rozpoczecia=2024,
-        rok_zakonczenia=2064,
-        kapital_poczatkowy=0
-    )
-    print(wynik)
+
+    # Parametry losowania
+    n = 10000  # liczba przykładów
+    plec_options = ["k", "m"]
+
+    # Funkcja do losowania z dużym priorytetem dla mniejszych wartości
+    def skewed_low(a, b, size=1, skew=3):
+        return (a + (b - a) * np.random.beta(skew, 1, size=size)).astype(int)
+
+    # Funkcja do losowania z dużym priorytetem dla większych wartości
+    def skewed_high(a, b, size=1, skew=3):
+        return (a + (b - a) * np.random.beta(1, skew, size=size)).astype(int)
+
+    results = []
+    for _ in range(n):
+        plec = np.random.choice(plec_options)
+        wynagrodzenie_brutto = skewed_high(4500, 100000, skew=10)[0]
+        rok_rozpoczecia = skewed_high(2024, 2064, skew=10)[0]
+        rok_zakonczenia = skewed_low(rok_rozpoczecia+1, 2064, skew=5)[0]
+        suma_wplaconych_skladek = skewed_high(0, 200000, skew=5)[0]
+
+        wynik = wylicz_emeryture(
+            df,
+            plec=plec,
+            wynagrodzenie_brutto=wynagrodzenie_brutto,
+            rok_rozpoczecia=rok_rozpoczecia,
+            rok_zakonczenia=rok_zakonczenia,
+            kapital_poczatkowy=0
+        )
+        row = {
+            "plec": plec,
+            "wynagrodzenie_brutto": wynagrodzenie_brutto,
+            "rok_rozpoczecia": rok_rozpoczecia,
+            "rok_zakonczenia": rok_zakonczenia,
+            "suma_wplaconych_skladek": suma_wplaconych_skladek,
+            **wynik
+        }
+        results.append(row)
+    
+    pd.DataFrame(results).to_csv("synthetic_data.csv", index=False)
+    print(f"Zapisano {n} rekordów do synthetic_data.csv")
