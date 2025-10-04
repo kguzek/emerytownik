@@ -196,6 +196,7 @@ if __name__ == "__main__":
         return (a + (b - a) * np.random.beta(1, skew, size=size)).astype(int)
 
     results = []
+    plotting_rows = []
     for _ in range(n):
         plec = np.random.choice(plec_options)
         wynagrodzenie_brutto = skewed_high(4500, 100000, skew=10)[0]
@@ -214,7 +215,6 @@ if __name__ == "__main__":
             suma_wplaconych_skladek=suma_wplaconych_skladek,
             absence=absence
         )
-        print(wynik)
         row = {
             "plec": plec,
             "wynagrodzenie_brutto": wynagrodzenie_brutto,
@@ -224,6 +224,19 @@ if __name__ == "__main__":
             "emerytura_nominalna": wynik["emerytura_nominalna"]
         }
         results.append(row)
+        
+        plotting_row = {
+            "plec": plec,
+            "wynagrodzenie_brutto": wynagrodzenie_brutto,
+            "rok_rozpoczecia": rok_rozpoczecia,
+            "rok_zakonczenia": rok_zakonczenia,
+            "absence": absence,
+            "emerytura_urealniona": wynik["emerytura_urealniona"],
+            "emerytura_nominalna": wynik["emerytura_nominalna"],
+            "stopa_zastapienia": wynik["stopa_zastapienia"]
+        }
+        plotting_rows.append(plotting_row)
     
     pd.DataFrame(results).to_csv("synthetic_data.csv", index=False)
-    print(f"Zapisano {n} rekordów do synthetic_data.csv")
+    pd.DataFrame(plotting_rows).to_csv("synthetic_plotting_data.csv", index=False)
+    print(f"Zapisano {n} rekordów do synthetic_data.csv i synthetic_plotting_data.csv")
