@@ -38,6 +38,17 @@ def load_parameters(csv_path: str) -> pd.DataFrame:
     df = df.set_index('rok')
     return df
 
+# Funkcja do pobierania dzielnika (life expectancy) z pliku CSV
+def get_dzielnik(year: int, age: int, csv_path: str = "Parametry-III 2025 - e_x M i K-PROGNOZA.csv") -> float:
+    df = pd.read_csv(csv_path)
+    df.columns = df.columns.str.strip()
+    # Usuwamy białe znaki i zamieniamy przecinki na kropki
+    value = df.loc[df['wiek'] == age, str(year)].values
+    if len(value) == 0:
+        raise ValueError(f"Brak dzielnika dla wieku {age} i roku {year}")
+    # Zamiana '1 001,2' na '1001.2'
+    val = str(value[0]).replace('\xa0', '').replace(' ', '').replace(',', '.')
+    return float(val)
 
 def wylicz_emeryture(
     df: pd.DataFrame,
@@ -52,8 +63,11 @@ def wylicz_emeryture(
     """
     Wylicza prognozowaną miesięczną emeryturę według ZUS, uwzględniając inflację i minimalną emeryturę.
     """
-    # Stały dzielnik wg płci (miesiące)
-    dzielnik = 987 if plec == "k" else 899
+    # Dzielnik pobierany z tabeli na podstawie wieku i roku zakończenia
+    # Przyjmujemy wiek emerytalny: wiek = 60 (k) lub 65 (m) jeśli nie podano
+    if wiek is None:
+        wiek = 60 if plec == "k" else 65
+    dzielnik = get_dzielnik(rok_zakonczenia, wiek)
 
     konto = 0.0
     subkonto = 0.0
@@ -172,7 +186,7 @@ if __name__ == "__main__":
             "rok_rozpoczecia": rok_rozpoczecia,
             "rok_zakonczenia": rok_zakonczenia,
             "suma_wplaconych_skladek": suma_wplaconych_skladek,
-            **wynik
+            "emerytura_nominalna": wynik["emerytura_nominalna"]
         }
         results.append(row)
     
