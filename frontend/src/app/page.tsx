@@ -2,7 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Toaster } from "sonner";
 
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
@@ -20,5 +23,13 @@ export default function Home() {
     return null;
   }
 
-  return <div>Hello {auth.user.username}</div>;
+  return (
+    <>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        <div className="p-10">Hello {auth.user.username}</div>
+      </main>
+    </>
+  );
 }

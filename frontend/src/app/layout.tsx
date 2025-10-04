@@ -5,6 +5,7 @@ import { QueryProvider } from "@/lib/query-client";
 
 import "./globals.css";
 
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 
@@ -28,8 +29,10 @@ export default function RootLayout({
       <QueryProvider>
         <AuthProvider>
           <body className={`${space_grotesk.variable} font-sans antialiased`}>
-            {children}
-            <Toaster />
+            <SidebarProvider>
+              {children}
+              <Toaster />
+            </SidebarProvider>
           </body>
         </AuthProvider>
       </QueryProvider>
