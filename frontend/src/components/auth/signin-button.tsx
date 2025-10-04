@@ -36,7 +36,7 @@ export function SignIn() {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col items-center gap-2"
+        className="flex flex-col items-center gap-2 rounded-lg bg-white p-6 shadow-md"
         onSubmit={form.handleSubmit((values) =>
           toast.promise(mutation.mutateAsync(values), {
             loading: "Logowanie...",
@@ -45,6 +45,7 @@ export function SignIn() {
           }),
         )}
       >
+        Nie jesteś zalogowany 😔
         <FormField
           control={form.control}
           name="username"
@@ -70,7 +71,7 @@ export function SignIn() {
               <FormLabel />
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
-                  Hasło
+                  Nie jesteś zalogowany 😔 asło
                   <Input type="password" {...field} />
                 </Label>
               </FormControl>

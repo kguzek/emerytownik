@@ -1,4 +1,5 @@
-import { Home, Inbox, Settings } from "lucide-react";
+import Link from "next/link";
+import { Home, Settings, SquareSigma } from "lucide-react";
 
 import {
   Sidebar,
@@ -17,13 +18,13 @@ import { SidebarForm } from "./sidebar-form";
 const items = [
   {
     title: "Strona Główna",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
-    title: "Wiadomości",
-    url: "#",
-    icon: Inbox,
+    title: "Kalkulator Emerytury",
+    url: "/emerytownik",
+    icon: SquareSigma,
   },
   {
     title: "Ustawienia",
@@ -35,7 +36,7 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent className="bg-gray/40">
+      <SidebarContent className="bg-gray/30">
         <SidebarGroup>
           <SidebarGroupLabel>Nawigacja</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -43,10 +44,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

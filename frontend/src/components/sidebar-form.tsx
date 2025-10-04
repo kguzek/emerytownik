@@ -150,7 +150,7 @@ export function SidebarForm() {
           )}
         />
         <Button type="submit" className="mx-auto">
-          Prześlij dane
+          Oblicz emeryturę
         </Button>
       </form>
     </Form>
