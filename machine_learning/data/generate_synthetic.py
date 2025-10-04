@@ -37,6 +37,8 @@ def load_parameters(csv_path: str) -> pd.DataFrame:
     df['rok'] = df['rok'].astype(int)
     df = df.set_index('rok')
     return df
+
+
 def wylicz_emeryture(
     df: pd.DataFrame,
     plec: Literal["k", "m"],
@@ -49,18 +51,6 @@ def wylicz_emeryture(
 ) -> dict:
     """
     Wylicza prognozowaną miesięczną emeryturę według ZUS, uwzględniając inflację i minimalną emeryturę.
-
-    Args:
-        df (pd.DataFrame): DataFrame z parametrami rocznymi.
-        plec (Literal["k", "m"]): Płeć użytkownika ("k" - kobieta, "m" - mężczyzna).
-        wynagrodzenie_brutto (float): Obecne miesięczne wynagrodzenie brutto.
-        rok_rozpoczecia (int): Rok rozpoczęcia pracy.
-        rok_zakonczenia (int): Rok zakończenia pracy.
-        kapital_poczatkowy (float): Kapitał początkowy (dla osób pracujących przed 1999).
-        wiek (Optional[int]): Obecny wiek użytkownika (opcjonalnie).
-
-    Returns:
-        dict: Słownik z wynikami: emerytura nominalna, urealniona, stopa zastąpienia, min emerytura, itd.
     """
     # Stały dzielnik wg płci (miesiące)
     dzielnik = 987 if plec == "k" else 899
@@ -69,50 +59,64 @@ def wylicz_emeryture(
     subkonto = 0.0
     suma_skladek = suma_wplaconych_skladek
 
-    # Używamy domyślnie podziału: konto = 9,76% - OFE - subkonto; subkonto = 4,38%
+    inflacja_cum = 1.0
+
     for rok in range(rok_rozpoczecia, rok_zakonczenia + 1):
         params = df.loc[rok]
+
         pw = params['przeciętne miesięczne wynagrodzenie w gospodarce narodowej']
         limit = params['ograniczenie górne miesięcznej podstawy wymiaru składek na ubezpieczenie emerytalne w danym roku, wyrażone w procencie przeciętnego miesięcznego wynagrodzenia w gospodarce narodowej'] / 100
         min_emerytura = params['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
-        inflacja = params['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem']
+
         waloryzacja_konto = params['wskaźnik waloryzacji składek zewidencjonowanych na koncie oraz kapitału początkowego za dany rok'] / 100
         waloryzacja_subkonto = params['wskaźnik waloryzacji składek zewidencjonowanych na subkoncie za dany rok'] / 100
 
-        # Limit składek: podstawa = min(wynagrodzenie_brutto, limit * pw)
+        inflacja = params['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem'] / 100
+
+        # Limit podstawy wymiaru składek
         max_podstawa = limit * pw
         podstawa = min(wynagrodzenie_brutto, max_podstawa)
 
-        # Składka roczna = podstawa * 12 * odpowiednia stopa
-    skladka_konto = podstawa * 12 * ((params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika'] + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100)
-    skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100)
-    suma_skladek += skladka_konto + skladka_subkonto
-    # OFE nie uwzględniamy, bo środki trafiają potem na subkonto
+        # Składki roczne
+        skladka_konto = podstawa * 12 * (
+            (params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika']
+             + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100
+            - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100
+            - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100
+        )
+        skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100)
 
-    # Waloryzacja składek i sumowanie
-    konto = (konto + skladka_konto) * waloryzacja_konto
-    subkonto = (subkonto + skladka_subkonto) * waloryzacja_subkonto
+        suma_skladek += skladka_konto + skladka_subkonto
 
-    # Dodajemy kapitał początkowy (waloryzowany)
-    # Przyjmujemy, że waloryzacja kapitału = waloryzacja ostatniego roku pracy
-    if kapital_poczatkowy > 0:
-        konto += kapital_poczatkowy * waloryzacja_konto
+        # Dodaj składki do kont
+        konto += skladka_konto
+        subkonto += skladka_subkonto
+
+        # Waloryzacja kont
+        konto *= waloryzacja_konto
+        subkonto *= waloryzacja_subkonto
+
+        # Waloryzacja kapitału początkowego (rok po roku)
+        if kapital_poczatkowy > 0:
+            kapital_poczatkowy *= waloryzacja_konto
+
+        # Inflacja kumulowana (jako wskaźnik np. 1.025)
+        inflacja_cum *= inflacja
+
+    # Dodajemy ostateczny kapitał początkowy do konta
+    konto += kapital_poczatkowy
 
     S = konto + subkonto
     emerytura_nominalna = S / dzielnik if dzielnik > 0 else 0.0
 
-    # Minimalna emerytura – z roku przejścia na emeryturę!
+    # Minimalna emerytura z roku przejścia na emeryturę
     min_emerytura = df.loc[rok_zakonczenia]['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
     emerytura_nominalna = max(emerytura_nominalna, min_emerytura)
 
-    # Urealnienie – mnożymy przez iloczyn (1/inflacja) z lat od przejścia na emeryturę do dziś (lub odwrotnie, w zależności od celu)
-    # Tu: pokazujemy siłę nabywczą świadczenia w cenach z pierwszego roku pracy
-    inflacja_cum = 1.0
-    for rok in range(rok_rozpoczecia, rok_zakonczenia + 1):
-        inflacja_cum *= df.loc[rok]['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem']
+    # Emerytura realna (w cenach z pierwszego roku pracy)
     emerytura_urealniona = emerytura_nominalna / inflacja_cum
 
-    # Stopa zastąpienia względem ostatniego wynagrodzenia
+    # Stopa zastąpienia względem przeciętnego wynagrodzenia w roku zakończenia pracy
     ostatnie_pw = df.loc[rok_zakonczenia]['przeciętne miesięczne wynagrodzenie w gospodarce narodowej']
     stopa_zastapienia = emerytura_nominalna / ostatnie_pw if ostatnie_pw else 0
 
@@ -124,8 +128,10 @@ def wylicz_emeryture(
         "inflacja_cum": inflacja_cum,
         "konto": konto,
         "subkonto": subkonto,
-        "S": S
+        "S": S,
+        "suma_skladek": suma_skladek
     }
+
 
 # PRZYKŁAD UŻYCIA:
 if __name__ == "__main__":
