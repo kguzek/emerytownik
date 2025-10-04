@@ -6,16 +6,37 @@ def load_parameters(csv_path: str) -> pd.DataFrame:
     Wczytaj parametry roczne do DataFrame i przygotuj do dalszego przetwarzania.
     """
     df = pd.read_csv(csv_path)
-    print(df.columns)
+    # Usuń białe znaki z nazw kolumn
+    df.columns = df.columns.str.strip()
+    # Konwersja liczb zapisanych jako stringi z przecinkiem na float
+    for col in [
+        'średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem',
+        'wskaźnik realnego wzrostu przeciętnego wynagrodzenia',
+        'przeciętne miesięczne wynagrodzenie w gospodarce narodowej',
+        'stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika',
+        'stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę',
+        'stopa składki na ubezpieczenie emerytalne odprowadzana do OFE',
+        'stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto',
+        'łączna stopa składki odprowadzanej do OFE i składki ewidencjonowanej na subkoncie',
+        'wskaźnik waloryzacji składek zewidencjonowanych na koncie oraz kapitału początkowego za dany rok',
+        'wskaźnik waloryzacji składek zewidencjonowanych na subkoncie za dany rok',
+        'ograniczenie górne miesięcznej podstawy wymiaru składek na ubezpieczenie emerytalne w danym roku, wyrażone w procencie przeciętnego miesięcznego wynagrodzenia w gospodarce narodowej',
+        'kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku'
+    ]:
+        df[col] = (
+            df[col]
+            .astype(str)
+            .str.replace("\xa0", "")
+            .str.replace(" ", "")
+            .str.replace(",", ".")
+            .str.replace("%", "")
+            .str.replace('"', "")
+            .replace("", "0")
+            .astype(float)
+        )
     df['rok'] = df['rok'].astype(int)
-    for col in df.columns:
-        if col != 'rok':
-            print("Processing column:", col)
-            df[col] = df[col].str.replace(',', '.').replace('_', '').replace(' ', '').astype(float)
-    # df.to_csv("cleaned parameters.csv", index=False)  # Zapisz wyczyszczone dane do pliku CSV
     df = df.set_index('rok')
     return df
-
 def wylicz_emeryture(
     df: pd.DataFrame,
     plec: Literal["k", "m"],
@@ -61,8 +82,8 @@ def wylicz_emeryture(
         podstawa = min(wynagrodzenie_brutto, max_podstawa)
 
         # Składka roczna = podstawa * 12 * odpowiednia stopa
-        skladka_konto = podstawa * 12 * ((params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika'] + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto ']/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100)
-        skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto ']/100)
+        skladka_konto = podstawa * 12 * ((params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracownika'] + params['stopa składki na ubezpieczenie emerytalne finansowanej przez pracodawcę'])/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100 - params['stopa składki na ubezpieczenie emerytalne odprowadzana do OFE']/100)
+        skladka_subkonto = podstawa * 12 * (params['stopa składki na ubezpieczenie emerytalne odprowadzana na subkonto']/100)
         # OFE nie uwzględniamy, bo środki trafiają potem na subkonto
 
         # Waloryzacja składek i sumowanie
