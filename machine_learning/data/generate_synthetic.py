@@ -153,7 +153,7 @@ if __name__ == "__main__":
     df = load_parameters("Parametry-III 2025 - parametry roczne.csv")
 
     # Parametry losowania
-    n = 10  # liczba przykładów
+    n = 20000  # liczba przykładów
     plec_options = ["k", "m"]
 
     # Funkcja do losowania z dużym priorytetem dla mniejszych wartości
