@@ -58,7 +58,8 @@ def wylicz_emeryture(
     rok_zakonczenia: int,
     kapital_poczatkowy: float = 0.0,
     suma_wplaconych_skladek: float = 0.0,
-    wiek: Optional[int] = None,  # niewykorzystywane w tym uproszczeniu
+    wiek: Optional[int] = None,
+    absence: Optional[bool] = False
 ) -> dict:
     """
     Wylicza prognozowaną miesięczną emeryturę według ZUS, uwzględniając inflację i minimalną emeryturę.
@@ -76,6 +77,13 @@ def wylicz_emeryture(
     inflacja_cum = 1.0
 
     for rok in range(rok_rozpoczecia, rok_zakonczenia + 1):
+        # Uwzględnij absencję chorobową i urlop macierzyński
+        absence_days = 0.0
+        if absence:
+            # Dla kobiet: absencja + urlop macierzyński, dla mężczyzn tylko absencja
+            absence_days = 15.92 if plec == "m" else (16.41 + 140.0)
+        # Dla uproszczenia: 1 rok = 365 dni, więc procent roku bez składek:
+        absence_factor = 1.0 - (absence_days / 365.0)
         params = df.loc[rok]
 
         pw = params['przeciętne miesięczne wynagrodzenie w gospodarce narodowej']
@@ -87,9 +95,14 @@ def wylicz_emeryture(
 
         inflacja = params['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem'] / 100
 
+        # Minimalna emerytura z roku przejścia na emeryturę
+        min_emerytura = df.loc[rok_zakonczenia]['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
+    
         # Limit podstawy wymiaru składek
         max_podstawa = limit * pw
         podstawa = min(wynagrodzenie_brutto, max_podstawa)
+        # Redukcja podstawy o absencję i urlop macierzyński
+        podstawa *= absence_factor
 
         # Składki roczne
         skladka_konto = podstawa * 12 * (
@@ -122,6 +135,13 @@ def wylicz_emeryture(
 
     S = konto + subkonto
     emerytura_nominalna = S / dzielnik if dzielnik > 0 else 0.0
+
+    lata_skladkowe = rok_zakonczenia - rok_rozpoczecia + 1
+    
+    # Zastosuj minimalną emeryturę tylko jeśli spełniony jest wymagany staż
+    wymagany_staz = 20 if plec == "k" else 25
+    if lata_skladkowe >= wymagany_staz:
+        emerytura_nominalna = max(emerytura_nominalna, min_emerytura)
 
     # Minimalna emerytura z roku przejścia na emeryturę
     min_emerytura = df.loc[rok_zakonczenia]['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
@@ -171,6 +191,7 @@ if __name__ == "__main__":
         rok_rozpoczecia = skewed_high(2024, 2064, skew=10)[0]
         rok_zakonczenia = skewed_low(rok_rozpoczecia+1, 2064, skew=5)[0]
         suma_wplaconych_skladek = skewed_high(0, 200000, skew=5)[0]
+        absence = np.random.choice([True, False])
 
         wynik = wylicz_emeryture(
             df,
@@ -178,7 +199,9 @@ if __name__ == "__main__":
             wynagrodzenie_brutto=wynagrodzenie_brutto,
             rok_rozpoczecia=rok_rozpoczecia,
             rok_zakonczenia=rok_zakonczenia,
-            kapital_poczatkowy=0
+            kapital_poczatkowy=0,
+            suma_wplaconych_skladek=suma_wplaconych_skladek,
+            absence=absence
         )
         row = {
             "plec": plec,
