@@ -74,7 +74,8 @@ def wylicz_emeryture(
     subkonto = 0.0
     suma_skladek = suma_wplaconych_skladek
 
-    inflacja_cum = 1.0
+    # Dla prostoty: oblicz inflację kumulatywną od roku rozpoczęcia do roku zakończenia
+    inflacja_cum_total = 1.0
 
     for rok in range(rok_rozpoczecia, rok_zakonczenia + 1):
         # Uwzględnij absencję chorobową i urlop macierzyński
@@ -93,7 +94,8 @@ def wylicz_emeryture(
         waloryzacja_konto = params['wskaźnik waloryzacji składek zewidencjonowanych na koncie oraz kapitału początkowego za dany rok'] / 100
         waloryzacja_subkonto = params['wskaźnik waloryzacji składek zewidencjonowanych na subkoncie za dany rok'] / 100
 
-        inflacja = params['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem'] / 100
+        inflacja = params['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem']
+        inflacja_cum_total *= inflacja
 
         # Minimalna emerytura z roku przejścia na emeryturę
         min_emerytura = df.loc[rok_zakonczenia]['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
@@ -127,8 +129,7 @@ def wylicz_emeryture(
         if kapital_poczatkowy > 0:
             kapital_poczatkowy *= waloryzacja_konto
 
-        # Inflacja kumulowana (jako wskaźnik np. 1.025)
-        inflacja_cum *= inflacja
+        # Inflacja już obliczona powyżej
 
     # Dodajemy ostateczny kapitał początkowy do konta
     konto += kapital_poczatkowy
@@ -147,8 +148,18 @@ def wylicz_emeryture(
     min_emerytura = df.loc[rok_zakonczenia]['kwota najniższej emerytury obowiązująca od marca danego roku do lutego następnego roku']
     emerytura_nominalna = max(emerytura_nominalna, min_emerytura)
 
-    # Emerytura realna (w cenach z pierwszego roku pracy)
-    emerytura_urealniona = emerytura_nominalna / inflacja_cum
+    # Emerytura realna (w cenach z roku 2025)
+    # Urealnienie do roku 2025
+    base_year = 2025
+    inflacja_adjustment = 1.0
+    if rok_zakonczenia > base_year:
+        for rok_adj in range(base_year + 1, rok_zakonczenia + 1):
+            inflacja_adjustment *= df.loc[rok_adj]['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem']
+    elif rok_zakonczenia < base_year:
+        for rok_adj in range(rok_zakonczenia + 1, base_year + 1):
+            inflacja_adjustment /= df.loc[rok_adj]['średnioroczny wskaźnik cen towarów i usług konsumpcyjnych ogółem']
+    
+    emerytura_urealniona = emerytura_nominalna / inflacja_adjustment
 
     # Stopa zastąpienia względem przeciętnego wynagrodzenia w roku zakończenia pracy
     ostatnie_pw = df.loc[rok_zakonczenia]['przeciętne miesięczne wynagrodzenie w gospodarce narodowej']
@@ -159,7 +170,7 @@ def wylicz_emeryture(
         "emerytura_urealniona": emerytura_urealniona,
         "stopa_zastapienia": stopa_zastapienia,
         "minimalna_emerytura": min_emerytura,
-        "inflacja_cum": inflacja_cum,
+        "inflacja_cum": inflacja_cum_total,
         "konto": konto,
         "subkonto": subkonto,
         "S": S,
@@ -188,7 +199,7 @@ if __name__ == "__main__":
     for _ in range(n):
         plec = np.random.choice(plec_options)
         wynagrodzenie_brutto = skewed_high(4500, 100000, skew=10)[0]
-        rok_rozpoczecia = skewed_high(2024, 2064, skew=10)[0]
+        rok_rozpoczecia = skewed_high(2024, 2064, skew=5)[0]
         rok_zakonczenia = skewed_low(rok_rozpoczecia+1, 2064, skew=5)[0]
         suma_wplaconych_skladek = skewed_high(0, 200000, skew=5)[0]
         absence = np.random.choice([True, False])
@@ -203,6 +214,7 @@ if __name__ == "__main__":
             suma_wplaconych_skladek=suma_wplaconych_skladek,
             absence=absence
         )
+        print(wynik)
         row = {
             "plec": plec,
             "wynagrodzenie_brutto": wynagrodzenie_brutto,
