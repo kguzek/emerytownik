@@ -118,13 +118,13 @@ def wylicz_emeryture(
 
     return {
         "emerytura_nominalna": emerytura_nominalna,
-        # "emerytura_urealniona": emerytura_urealniona,
-        # "stopa_zastapienia": stopa_zastapienia,
-        # "minimalna_emerytura": min_emerytura,
-        # "inflacja_cum": inflacja_cum,
-        # "konto": konto,
-        # "subkonto": subkonto,
-        # "S": S
+        "emerytura_urealniona": emerytura_urealniona,
+        "stopa_zastapienia": stopa_zastapienia,
+        "minimalna_emerytura": min_emerytura,
+        "inflacja_cum": inflacja_cum,
+        "konto": konto,
+        "subkonto": subkonto,
+        "S": S
     }
 
 # PRZYKŁAD UŻYCIA:
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     df = load_parameters("Parametry-III 2025 - parametry roczne.csv")
 
     # Parametry losowania
-    n = 10000  # liczba przykładów
+    n = 10  # liczba przykładów
     plec_options = ["k", "m"]
 
     # Funkcja do losowania z dużym priorytetem dla mniejszych wartości
