@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/data-table";
 import { Spinner } from "@/components/spinner";
 import { useCalculator } from "@/hooks/use-calculator";
 
@@ -10,5 +11,9 @@ export function Graphs() {
     <div className="flex h-[620px] w-full items-center justify-center">
       <Spinner />
     </div>
-  ) : null;
+  ) : (
+    <div className="bg-gray/20 mx-20 rounded-md p-2">
+      <DataTable data={state} />
+    </div>
+  );
 }

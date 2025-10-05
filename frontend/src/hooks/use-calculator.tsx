@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
-type State = "graph" | "loading" | "calculate";
+import type { ApiResult } from "@/lib/types";
+
+type State = "graph" | "loading" | ApiResult;
 
 interface CalculatorContextType {
   state: State;

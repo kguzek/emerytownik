@@ -39,8 +39,7 @@ export function SidebarForm() {
   async function handleSubmit(data: DetailsFormValues) {
     setState("loading");
     const result = await generateSyntheticData(data);
-    console.log({ result });
-    setState("calculate");
+    setState(result);
   }
 
   return (
