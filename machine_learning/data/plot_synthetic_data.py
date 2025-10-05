@@ -109,16 +109,16 @@ def plot_pension_distribution(df: pd.DataFrame) -> go.Figure:
         xaxis_title="Przedziały emerytury",
         yaxis_title="Liczba przypadków",
         height=600,
-        hovermode='closest',
-        xaxis={'categoryorder': 'array', 'categoryarray': pension_labels},
+        hovermode="closest",
+        xaxis={"categoryorder": "array", "categoryarray": pension_labels},
         showlegend=False,
-        margin=dict(t=20, b=40, l=40, r=20)
+        margin=dict(t=20, b=40, l=40, r=20),
     )
-    
+
     # Usuń kontrolki plotly
-    config = {'displayModeBar': False}
+    config = {"displayModeBar": False}
     fig.update_layout(dragmode=False)
-    
+
     return fig
 
 
@@ -143,9 +143,9 @@ def plot_pension_by_gender(df: pd.DataFrame) -> go.Figure:
         xaxis_title="Emerytura urealniona (PLN)",
         yaxis_title="Liczba przypadków",
         height=600,
-        barmode='overlay',
+        barmode="overlay",
         margin=dict(t=20, b=40, l=40, r=20),
-        dragmode=False
+        dragmode=False,
     )
 
     fig.update_traces(opacity=0.7)
@@ -175,13 +175,9 @@ def plot_salary_vs_pension(df: pd.DataFrame) -> go.Figure:
         },
         color_discrete_map={"k": "pink", "m": "lightblue"},
     )
-    
-    fig.update_layout(
-        height=600,
-        margin=dict(t=20, b=40, l=40, r=20),
-        dragmode=False
-    )
-    
+
+    fig.update_layout(height=600, margin=dict(t=20, b=40, l=40, r=20), dragmode=False)
+
     return fig
 
 
@@ -255,13 +251,9 @@ def create_dashboard(df: pd.DataFrame) -> go.Figure:
         row=2,
         col=2,
     )
-    
-    fig.update_layout(
-        height=800,
-        margin=dict(t=20, b=40, l=40, r=20),
-        dragmode=False
-    )
-    
+
+    fig.update_layout(height=600, margin=dict(t=20, b=40, l=40, r=20), dragmode=False)
+
     return fig
 
 
@@ -274,26 +266,27 @@ if __name__ == "__main__":
 
     # Generuj wykresy
     config = {
-        'displayModeBar': False,
-        'staticPlot': False,
-        'scrollZoom': False,
-        'doubleClick': False,
-        'showTips': False,
-        'displaylogo': False,
-        'watermark': False
+        "displayModeBar": False,
+        "staticPlot": False,
+        "scrollZoom": False,
+        "doubleClick": False,
+        "showTips": False,
+        "displaylogo": False,
+        "watermark": False,
     }
     fig1 = plot_pension_distribution(df)
 
     fig2 = plot_pension_by_gender(df)
-    
+
     fig3 = plot_salary_vs_pension(df)
-    
+
     # Dashboard
     dashboard = create_dashboard(df)
-    dashboard.show(config=config)
-    
+    if should_show:
+        dashboard.show(config=config)
+
     # Zapisz wykresy do HTML
 
     dashboard.write_html("pension_dashboard.html", config=config)
-    
+
     print("Wykresy zapisane do plików HTML")

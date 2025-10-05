@@ -1,9 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+
+import type { DetailsFormValues } from "@/lib/types";
+import { generateSyntheticData } from "@/app/actions";
+import { useCalculator } from "@/hooks/use-calculator";
 
 import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
 import {
   Form,
   FormControl,
@@ -16,17 +20,9 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-interface DetailsFormValues {
-  yearOfBirth: number;
-  gender: "male" | "female";
-  salary: number;
-  employedSinceYear: number;
-  expectedEmployedUntilYear: number;
-  nationalRetirementAge: number;
-  savings?: number;
-}
-
 export function SidebarForm() {
+  const { setState } = useCalculator();
+
   const form = useForm<DetailsFormValues>({
     defaultValues: {
       yearOfBirth: 1990,
@@ -36,16 +32,22 @@ export function SidebarForm() {
       expectedEmployedUntilYear: 2050,
       nationalRetirementAge: 67,
       savings: 10000,
+      allowAbsences: false,
     },
   });
+
+  async function handleSubmit(data: DetailsFormValues) {
+    setState("loading");
+    const result = await generateSyntheticData(data);
+    console.log({ result });
+    setState("calculate");
+  }
 
   return (
     <Form {...form}>
       <form
         className="flex flex-col items-stretch gap-2 rounded-md bg-white p-4"
-        onSubmit={form.handleSubmit(() => {
-          toast.success("Dane zapisane (nie naprawdę, to tylko demo)");
-        })}
+        onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
           control={form.control}
@@ -142,6 +144,23 @@ export function SidebarForm() {
                 <Label className="flex flex-col items-start gap-2">
                   Oszczędności na start (opcjonalne, zł)
                   <Input type="number" min={0} step={1} {...field} />
+                </Label>
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="allowAbsences"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel />
+              <FormControl>
+                <Label className="flex items-start gap-2">
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  Uwzględnij możliwość zwolnień lekarskich
                 </Label>
               </FormControl>
               <FormDescription />
