@@ -23,7 +23,7 @@ const items = [
   },
   {
     title: "Kalkulator Emerytury",
-    url: "/emerytownik",
+    url: "/emerytownik/kalkulator",
     icon: SquareSigma,
   },
   {

@@ -3871,9 +3871,17 @@
                         transition: border-color 0.2s ease;
                       "
                     >
-                      <a href="http://localhost:3000/" class="nav__li--lvl1-link">
+                      <a id="emerytownik-anchor" href="idk" class="nav__li--lvl1-link">
                         Emerytownik
                       </a>
+                      <script>
+                        document
+                          .querySelector("#emerytownik-anchor")
+                          .setAttribute(
+                            "href",
+                            document.location.origin + "/emerytownik/intro",
+                          );
+                      </script>
                     </li>
 
                     <li class="nav__li--lvl1">

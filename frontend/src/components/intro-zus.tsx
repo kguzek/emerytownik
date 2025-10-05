@@ -55,7 +55,7 @@ export default function IntroZUS() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Button asChild variant="link">
-              <Link href="/emerytownik">Przejdź do kalkulatora emerytury</Link>
+              <Link href="/emerytownik/kalkulator">Przejdź do kalkulatora emerytury</Link>
             </Button>
           </motion.div>
 
@@ -105,7 +105,7 @@ export default function IntroZUS() {
             transition={{ delay: 1.8 }}
           >
             <Button className="rounded-xl px-10 py-8 text-3xl" size="lg" asChild>
-              <Link href="/emerytownik">Rozpocznij</Link>
+              <Link href="/emerytownik/kalkulator">Rozpocznij</Link>
             </Button>
           </motion.div>
 
