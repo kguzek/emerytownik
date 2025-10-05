@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # <-- add this import
 from generate_synthetic import wylicz_emeryture
 
 app = Flask(__name__)
-
+CORS(app)  # <-- enable CORS for all routes and origins
 
 all_records = []
 
@@ -45,14 +46,12 @@ def calculate():
             wynagrodzenie_brutto=data["salary"],
             rok_rozpoczecia=data["employedSinceYear"],
             rok_zakonczenia=data["expectedEmployedUntilYear"],
-            # wiek_emerytalny=data["nationalRetirementAge"],
-            kapital_poczatkowy=data["savings"] if "savings" in data else 0,
+            kapital_poczatkowy=data.get("savings", 0),
             wiek=age,
-            # suma_wplaconych_skladek=data["totalContributions"]
             absence=data["allowAbsences"],
         )
 
-        if data["ignore"] != "true":
+        if data.get("ignore") != "true":
             record = data.copy()
             record.update(result)
             record["generated_at"] = datetime.now().isoformat()
