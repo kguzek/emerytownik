@@ -45,9 +45,9 @@ def isntantiate_disc_model(cfg: DictConfig, dataset: DictConfig) -> torch.nn.Mod
     num_classes = 20 if dataset_name == "Scm20dDataset" else num_classes
 
     disc_model = instantiate(
-        cfg.disc_model.model,
-        input_size=dataset.X_train.shape[1],
-        target_size=num_classes,
+        cfg.disc_model,
+        input_dim=dataset.X_train.shape[1],
+        # target_size=num_classes,
     )
     return disc_model
 
@@ -109,14 +109,14 @@ def evaluate_disc_model(disc_model: torch.nn.Module, dataset: DictConfig) -> dic
     """
     logger.info("Evaluating discriminator model")
     try:
-        print(classification_report(dataset.y_test, disc_model.predict(dataset.X_test)))
+        print(classification_report(dataset.y_test, disc_model.predict(torch.from_numpy(dataset.X_test))))
         report = classification_report(
-            dataset.y_test, disc_model.predict(dataset.X_test), output_dict=True
+            dataset.y_test, disc_model.predict(torch.from_numpy(dataset.X_test)), output_dict=True
         )
     except ValueError:
         # evaluate regression model on R1 score
         report = [
-            {"r2_score": r2_score(dataset.y_test, disc_model.predict(dataset.X_test))}
+            {"r2_score": r2_score(dataset.y_test, disc_model.predict(torch.from_numpy(dataset.X_test)))}
         ]
         print(report)
 
@@ -145,15 +145,18 @@ def create_disc_model(
     Returns:
         torch.nn.Module: Trained and evaluated discriminative model in evaluation mode
     """
-    disc_model_name = cfg.disc_model.model._target_.split(".")[-1]
+    disc_model_name = cfg.disc_model._target_.split(".")[-1]
     disc_model = isntantiate_disc_model(cfg, dataset)
     print(disc_model_path)
+
 
     if cfg.disc_model.train_model:
         disc_model = train_disc_model(disc_model, dataset, disc_model_path, cfg)
     else:
-        logger.info("Loading discriminator model")
-        disc_model.load(disc_model_path)
+        logger.info("Loading discriminator model (PyTorch Lightning)")
+        # Use LightningModule.load_from_checkpoint for PyTorch Lightning models
+        disc_model_class = type(disc_model)
+        disc_model = disc_model_class.load_from_checkpoint(disc_model_path)
 
     disc_model.eval()
     report = evaluate_disc_model(disc_model, dataset)

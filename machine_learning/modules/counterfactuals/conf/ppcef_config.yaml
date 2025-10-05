@@ -46,7 +46,7 @@ counterfactuals_params:
     _target_: counterfactuals.cf_methods.PPCEF
 
   disc_model_criterion:
-    _target_: counterfactuals.losses.MulticlassDiscLoss
+    _target_: counterfactuals.losses.BinaryDiscLoss
     # _target_: counterfactuals.losses.BinaryDiscLoss
 
   log_prob_quantile: 0.25

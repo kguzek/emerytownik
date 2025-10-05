@@ -145,7 +145,7 @@ def parse_args():
     parser.add_argument('--dropout', type=float, default=0.2, help='Współczynnik dropout')
     parser.add_argument('--categorical_columns', type=str, nargs='*', default=["plec"], 
                         help='Nazwy kolumn kategorycznych do one-hot encoding')
-    parser.add_argument('--numerical_columns', type=str, nargs='*', default=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek",], 
+    parser.add_argument('--numerical_columns', type=str, nargs='*', default=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek"], 
                         help='Nazwy kolumn numerycznych do standaryzacji')
     
     parser.add_argument('--batch_size', type=int, default=32, help='Rozmiar batcha')

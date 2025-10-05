@@ -1,8 +1,10 @@
 import pandas as pd
 from typing import Literal, Optional
+import numpy as np
 
 LOWER_LIMIT = 5_000
-UPPER_LIMIT = 8_000
+UPPER_LIMIT = 15_000
+np.random.seed(42)
 
 def load_parameters(csv_path: str) -> pd.DataFrame:
     """

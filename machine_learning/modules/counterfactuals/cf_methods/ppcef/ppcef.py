@@ -9,35 +9,6 @@ from counterfactuals.cf_methods.base import BaseCounterfactual
 from counterfactuals.discriminative_models.base import BaseDiscModel
 from counterfactuals.generative_models.base import BaseGenModel
 
-# Experimenting with custom autograd function
-# TODO: Move to separate file
-# class OneHotSoftmax(torch.autograd.Function):
-#     @staticmethod
-#     def forward(ctx, input, temp=0.03):
-#         # Store input and temperature for use in backward
-#         ctx.save_for_backward(input)
-#         ctx.temp = temp
-
-#         # Compute argmax and one-hot encode it
-#         indices = input.argmax(dim=1)
-#         one_hot = torch.nn.functional.one_hot(
-#             indices, num_classes=input.size(1)
-#         ).float()
-
-#         return one_hot
-
-#     @staticmethod
-#     def backward(ctx, grad_output):
-#         # Retrieve saved input and temperature
-#         (input,) = ctx.saved_tensors
-#         temp = ctx.temp
-
-#         # Compute gradients of softmax with respect to input
-#         softmax = torch.nn.functional.softmax(input / temp, dim=1)
-#         grad_input = grad_output * (softmax * (1 - softmax) / temp)
-
-#         return grad_input, None  # None corresponds to no gradient for temp
-
 
 class TorchDequantizer(nn.Module):
     def __init__(self):
@@ -74,14 +45,24 @@ class PPCEF(BaseCounterfactual):
         disc_model: BaseDiscModel,
         disc_model_criterion,
         device=None,
+        zero_grad_dims=None,
     ):
         self.disc_model_criterion = disc_model_criterion
         self.gen_model = gen_model
         self.disc_model = disc_model
         self.device = device if device is not None else "cpu"
-        self.gen_model.to(self.device)
+        # self.gen_model.to(self.device)
         self.disc_model.to(self.device)
         self.beta = 0
+        self.zero_grad_dims = zero_grad_dims
+
+    def _zero_grad_hook(self, grad):
+        """
+        Hook to zero gradients for specified dimensions of delta.
+        """
+        if self.zero_grad_dims is not None:
+            grad[:, self.zero_grad_dims] = 0
+        return grad
 
     def _search_step(
         self, delta, x_origin, contexts_origin, context_target, **search_step_kwargs
@@ -128,6 +109,8 @@ class PPCEF(BaseCounterfactual):
         p_x_param_c_target = self.gen_model(
             x_origin + delta, context=context_target.type(torch.float32)
         )
+        # ensure p_x_param_c_target is a float tensor (handles scalars and batches)
+        p_x_param_c_target = p_x_param_c_target.to(dtype=torch.float32)
 
         max_inner = torch.nn.functional.relu(
             log_prob_threshold * 0.5 - p_x_param_c_target
@@ -180,9 +163,9 @@ class PPCEF(BaseCounterfactual):
         Search counterfactual explanations for the given dataloader.
         """
         self.epochs = epochs
-        self.gen_model.eval()
-        for param in self.gen_model.parameters():
-            param.requires_grad = False
+        # self.gen_model.eval()
+        # for param in self.gen_model.parameters():
+        #    param.requires_grad = False
 
         if self.disc_model:
             self.disc_model.eval()

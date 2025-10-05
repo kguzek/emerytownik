@@ -24,7 +24,7 @@ def instantiate_gen_model(cfg: DictConfig, dataset: DictConfig) -> torch.nn.Modu
     """
     logger.info("Creating generative model")
     gen_model = instantiate(
-        cfg.gen_model.model, dataset=dataset # , features=dataset.X_train.shape[1], context_features=1
+        cfg.gen_model, dataset=dataset # , features=dataset.X_train.shape[1], context_features=1
     )
     return gen_model
 
@@ -101,7 +101,7 @@ def evaluate_gen_model(
     test_dataloader = dataset.test_dataloader(
         batch_size=cfg.gen_model.batch_size, shuffle=False
     )
-    gen_model.eval()
+    # gen_model.eval()
     logger.info("Evaluating generative model")
     train_ll = gen_model.predict_log_prob(train_dataloader).mean().item()
     test_ll = gen_model.predict_log_prob(test_dataloader).mean().item()
@@ -138,10 +138,12 @@ def create_gen_model(
             gen_model, dataset, gen_model_path, cfg, dequantizer
         )
     else:
-        logger.info("Loading generative model")
-        gen_model.load(gen_model_path)
+        logger.info("Loading generative model (PyTorch Lightning)")
+        #gen_model_class = type(gen_model)
+        #gen_model = gen_model_class.load_from_checkpoint(gen_model_path)
 
-    gen_model.eval()
+    # gen_model.eval()
     logger.info("Evaluating generative model")
     evaluate_gen_model(cfg, gen_model, dataset)
+    gen_model.fit_naive_bayes(dataset.train_dataloader(batch_size=cfg.gen_model.batch_size, shuffle=True, noise_lvl=0.0))
     return gen_model

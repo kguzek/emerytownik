@@ -63,7 +63,7 @@ def search_counterfactuals(
             - cf_search_time (float): Time taken for counterfactual search in seconds
     """
     cf_method_name = cfg.counterfactuals_params.cf_method._target_.split(".")[-1]
-    disc_model_name = cfg.disc_model.model._target_.split(".")[-1]
+    disc_model_name = cfg.disc_model._target_.split(".")[-1]
 
     logger.info("Filtering out target class data for counterfactual generation")
     target_class = cfg.counterfactuals_params.target_class
@@ -78,6 +78,7 @@ def search_counterfactuals(
         gen_model=gen_model,
         disc_model=disc_model,
         disc_model_criterion=disc_model_criterion,
+        zero_grad_dims=cfg.counterfactuals_params.cf_method.get("zero_grad_dims", None),
     )
 
     logger.info("Calculating log_prob_threshold")
@@ -90,16 +91,19 @@ def search_counterfactuals(
     )
     logger.info(f"log_prob_threshold: {log_prob_threshold:.4f}")
 
+
     logger.info("Handling counterfactual generation")
+    X_new, y_new = dataset.read_new_test(cfg.dataset.test_path)
     cf_dataloader = torch.utils.data.DataLoader(
         torch.utils.data.TensorDataset(
-            torch.tensor(X_test_origin).float(),
-            torch.tensor(y_test_origin).float(),
+            torch.tensor(np.concatenate(X_test_origin, X_new)).float(),
+            torch.tensor(np.concatenate(y_test_origin, y_new)).float(),
         ),
         batch_size=cfg.counterfactuals_params.batch_size,
         shuffle=False,
     )
     time_start = time()
+    print("Starting counterfactual search...")
     delta, Xs, ys_orig, ys_target, logs = cf_method.explain_dataloader(
         dataloader=cf_dataloader,
         epochs=cfg.counterfactuals_params.epochs,
@@ -110,10 +114,11 @@ def search_counterfactuals(
         alpha_k=cfg.counterfactuals_params.alpha_k,
         log_prob_threshold=log_prob_threshold,
         categorical_intervals=get_categorical_intervals(
-            cfg.counterfactuals_params.use_categorical,
-            dataset.categorical_features_lists,
+            False, # cfg.counterfactuals_params.use_categorical,
+            [] # dataset.categorical_features_lists,
         ),
     )
+
 
     cf_search_time = np.mean(time() - time_start)
     logger.info(f"Counterfactual search time: {cf_search_time:.4f} seconds")
@@ -123,12 +128,13 @@ def search_counterfactuals(
 
     Xs_cfs = Xs + delta
 
-    if cfg.counterfactuals_params.use_categorical:
-        Xs_cfs = apply_categorical_discretization(
-            dataset.categorical_features_lists, Xs_cfs
-        )
+    # if cfg.counterfactuals_params.use_categorical:
+    #     Xs_cfs = apply_categorical_discretization(
+    #         dataset.categorical_features_lists, Xs_cfs
+    #     )
 
     pd.DataFrame(Xs_cfs).to_csv(counterfactuals_path, index=False)
+    pd.DataFrame(Xs_cfs[-1]).to_csv('./prediction.csv', index=False)
     logger.info(f"Counterfactuals saved to: {counterfactuals_path}")
     return Xs_cfs, Xs, log_prob_threshold, ys_orig, ys_target, cf_search_time
 
@@ -239,18 +245,21 @@ def main(cfg: DictConfig):
     logger.info("Initializing pipeline")
 
     disc_model_path, gen_model_path, save_folder = set_model_paths(cfg)
+    
 
     logger.info("Loading dataset")
     dataset = instantiate(cfg.dataset)
+    print("Dataset test shape >>>", dataset.X_test.shape)
     for fold_n, _ in enumerate(dataset.get_cv_splits(5)):
         disc_model_path, gen_model_path, save_folder = set_model_paths(cfg, fold=fold_n)
+        disc_model_path = cfg.disc_model.pretrained_path
         disc_model = create_disc_model(cfg, dataset, disc_model_path, save_folder)
 
         if cfg.experiment.relabel_with_disc_model:
-            dataset.y_train = disc_model.predict(dataset.X_train).detach().numpy()
-            dataset.y_test = disc_model.predict(dataset.X_test).detach().numpy()
+            dataset.y_train = disc_model.predict(torch.from_numpy(dataset.X_train)).detach().numpy()
+            dataset.y_test = disc_model.predict(torch.from_numpy(dataset.X_test)).detach().numpy()
 
-        dequantizer, _ = dequantize(dataset)
+        dequantizer, _ = None, None # dequantize(dataset)
         dataset = instantiate(cfg.dataset)
         gen_model = create_gen_model(cfg, dataset, gen_model_path, dequantizer)
 
@@ -259,29 +268,8 @@ def main(cfg: DictConfig):
             search_counterfactuals(cfg, dataset, gen_model, disc_model, save_folder)
         )
 
-        if dequantizer is None:
-            raise ValueError(
-                "dequantizer is not initialized. Please check its assignment before inverse_dequantize."
-            )
-
-        logger.info(
-            f"Calling inverse_dequantize with Xs of type: {type(Xs)} and shape: {getattr(Xs, 'shape', None)}"
-        )
-        logger.info(f"dequantizer type: {type(dequantizer)}")
-
-        try:
-            Xs = inverse_dequantize(dataset, dequantizer, data=Xs)
-            logger.info(
-                f"inverse_dequantize successful, Xs shape: {getattr(Xs, 'shape', None)}"
-            )
-        except Exception as e:
-            logger.error(f"Error in inverse_dequantize: {e}")
-            logger.error(f"Xs type: {type(Xs)}, shape: {getattr(Xs, 'shape', None)}")
-            logger.error(f"dequantizer: {dequantizer}")
-            raise
-
-        gen_model = DequantizingFlow(gen_model, dequantizer, dataset)
         dataset = instantiate(cfg.dataset)
+        gen_model.save()
 
         metrics = calculate_metrics(
             gen_model=gen_model,
@@ -297,13 +285,17 @@ def main(cfg: DictConfig):
             y_target=ys_target,
             median_log_prob=log_prob_threshold,
         )
+        # Save the discriminative model after training with PPCEF (always a LightningModule)
         logger.info(f"Metrics for fold {fold_n}: {metrics}")
         df_metrics = pd.DataFrame(metrics, index=[0])
         df_metrics["cf_search_time"] = cf_search_time
-        disc_model_name = cfg.disc_model.model._target_.split(".")[-1]
+        disc_model_name = cfg.disc_model._target_.split(".")[-1]
         df_metrics.to_csv(
             os.path.join(save_folder, f"cf_metrics_{disc_model_name}.csv"), index=False
         )
+        disc_model.save_checkpoint(os.path.join(save_folder, f"disc_model_ppcef_fold{fold_n}.ckpt"))
+
+    
 
 
 if __name__ == "__main__":

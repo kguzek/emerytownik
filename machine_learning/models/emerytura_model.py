@@ -5,7 +5,7 @@ from typing import Literal, Optional
 from .generate_synthetic import wylicz_emeryture, load_parameters
 
 class EmeryturaModel:
-    def __init__(self, param_csv_path, dataset, std=1.0):
+    def __init__(self, param_csv_path, dataset, std=1.0, noise_lvl=0.02):
         self.df = load_parameters(param_csv_path)
         self.std = std  # Standard deviation for log_prob
         self.dataset = dataset

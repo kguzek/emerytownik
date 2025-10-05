@@ -16,7 +16,7 @@ class CSVDataset(Dataset):
         return len(self.X)
     
     def __getitem__(self, idx):
-        return self.X[idx], (self.y[idx] > torch.randint(5_000, 7_500, size=(1, ))).float().squeeze()
+        return self.X[idx], self.y[idx]
 
 
 class ColumnPreprocessor:
@@ -59,7 +59,7 @@ class ColumnPreprocessor:
 class DataModule(pl.LightningDataModule):
     def __init__(self, csv_path, target_column,  
                  categorical_columns=["plec"], 
-                 numerical_columns=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek",], 
+                 numerical_columns=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek", "emerytura_nominalna"], 
                  batch_size=32, 
                  test_size=0.2, 
                  val_size=0.1, 
