@@ -20,7 +20,16 @@ import { Button } from "./ui/button";
 const hasLabel = (key: string): key is keyof typeof API_RESULT_LABELS =>
   key in API_RESULT_LABELS;
 
-export function DataTable({ data }: { data: ApiResult }) {
+export function DataTable({
+  data,
+  addAverage = false,
+}: {
+  data: ApiResult | Record<string, string | number>;
+  addAverage?: boolean;
+}) {
+  const additionalEntries = addAverage
+    ? [["srednia_emerytura", AVERAGE_EMERYTURA] as const]
+    : [];
   return (
     <Table>
       <TableCaption>
@@ -41,25 +50,26 @@ export function DataTable({ data }: { data: ApiResult }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {[...Object.entries(data), ["srednia_emerytura", AVERAGE_EMERYTURA] as const]
-          .filter(([key]) => hasLabel(key))
-          .map(([key, value], index) =>
-            hasLabel(key) ? (
-              <TableRow
-                key={key}
-                className={cn(index % 2 === 0 ? "bg-white" : "bg-orange/25")}
-              >
-                <TableCell className="w-lg font-medium">
-                  {API_RESULT_LABELS[key]}
-                </TableCell>
-                <TableCell>
-                  {["stopa_zastapienia", "inflacja_cum"].includes(key)
-                    ? `${value.toFixed(2)}%`
-                    : formatCurrency(value)}
-                </TableCell>
-              </TableRow>
-            ) : null,
-          )}
+        {[...Object.entries(data), ...additionalEntries]
+
+          .filter(([key]) => hasLabel(key) || !addAverage)
+          .map(([key, value], index) => (
+            <TableRow
+              key={key}
+              className={cn(index % 2 === 0 ? "bg-white" : "bg-orange/25")}
+            >
+              <TableCell className="w-lg font-medium">
+                {API_RESULT_LABELS[key as keyof typeof API_RESULT_LABELS] ?? key}
+              </TableCell>
+              <TableCell>
+                {["stopa_zastapienia", "inflacja_cum"].includes(key)
+                  ? `${value.toFixed(2)}%`
+                  : typeof value === "number"
+                    ? formatCurrency(value)
+                    : value}
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

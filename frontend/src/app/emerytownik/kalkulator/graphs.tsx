@@ -24,17 +24,23 @@ export function Graphs() {
   const userDetails = details as DetailsFormValues;
 
   async function calculateYears(data: ApiResult): Promise<void> {
-    for (let diff = 1; diff <= 120; diff++) {
-      const res = await generateSyntheticData({
-        ...data,
-        targetEmerytura: target,
-        ...userDetails,
-        expectedEmployedUntilYear: userDetails.expectedEmployedUntilYear + diff,
-        ignore: "true",
-      });
-      if (res.emerytura_nominalna >= target!) {
-        setCalculatedYears(diff);
-        return;
+    for (let diff = 1; diff <= 100; diff++) {
+      let res;
+      try {
+        res = await generateSyntheticData({
+          ...data,
+          targetEmerytura: target,
+          ...userDetails,
+          expectedEmployedUntilYear: userDetails.expectedEmployedUntilYear + diff,
+          ignore: "true",
+        });
+
+        if (res.emerytura_nominalna >= target!) {
+          setCalculatedYears(diff);
+          return;
+        }
+      } catch (error) {
+        break;
       }
     }
     setCalculatedYears(-1);
@@ -79,7 +85,7 @@ export function Graphs() {
           </TabsList>
           {state.map((data) => (
             <TabsContent key={`table-${data.endYear}`} value={String(data.endYear)}>
-              <DataTable data={data.data} />
+              <DataTable addAverage data={data.data} />
             </TabsContent>
           ))}
         </Tabs>
@@ -93,23 +99,39 @@ export function Graphs() {
                 zł.
               </div>
             ) : calculatedYears == null ? (
-              <Spinner label="Trwa obliczanie..." />
+              <Spinner label="Trwa obliczanie prognozy emerytalnej..." />
             ) : calculatedYears === -1 ? (
               <div>
-                Nie udało się obliczyć wymaganej ilości lat do przepracowania, aby uzyskać
-                Twój cel. Proszę spróbować ponownie innymi wartościami.
+                Nie udało się obliczyć wymaganej ilości lat do przepracowania, aby spełnić
+                Twój cel. Proszę spróbować ponownie wpisując inne wartości.
               </div>
             ) : (
               <div>
-                Aby spełnić swój cel emerytalny w wysokości {formatCurrency(target)},
-                musisz przepracować{" "}
-                {conjugateNumeric(
-                  calculatedYears,
-                  "rok więcej",
-                  "lata więcej",
-                  "dodatkowych lat",
-                )}
-                , czyli do roku {userDetails.expectedEmployedUntilYear + calculatedYears}.
+                <p>
+                  Aby spełnić swój cel emerytalny w wysokości {formatCurrency(target)}{" "}
+                  przy obecnie ustawionych parametrach, musisz przepracować{" "}
+                  {conjugateNumeric(
+                    calculatedYears,
+                    "rok więcej",
+                    "lata więcej",
+                    "dodatkowych lat",
+                  )}
+                  , czyli do roku{" "}
+                  {userDetails.expectedEmployedUntilYear + calculatedYears}.
+                </p>
+                <p className="mt-4">
+                  W innym przypadku, specjalnie dla Ciebie przygotowaliśmy następujący
+                  plan działania. Oto nasze sugestie:
+                </p>
+                <div className="bg-gray/20 mt-4 rounded-md p-2">
+                  <DataTable
+                    data={{
+                      Wynagrodzenie: `+ ${formatCurrency(200)}`,
+                      Oszczędności: `+ ${formatCurrency(100)}`,
+                      "Rozpoczęcie pracy": `3 lata wcześniej`,
+                    }}
+                  />
+                </div>
               </div>
             )}
           </div>

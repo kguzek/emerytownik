@@ -2,7 +2,10 @@ import xlsx from "json-as-xlsx";
 
 import type { AdminRecord, ApiResult } from "./types";
 
-export function downloadFile(data: (AdminRecord | ApiResult)[], filename: string) {
+export function downloadFile(
+  data: (AdminRecord | ApiResult | Record<string, string | number>)[],
+  filename: string,
+) {
   const settings = {
     fileName: filename, // Name of the resulting spreadsheet
     extraLength: 3, // A bigger number means that columns will be wider
