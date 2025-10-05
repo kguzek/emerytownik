@@ -79,13 +79,18 @@ def plot_pension_distribution(df: pd.DataFrame) -> go.Figure:
     
     # Dostosowanie layoutu
     fig.update_layout(
-        title='Rozkład emerytury urealnionej według przedziałów (w cenach 2025)',
         xaxis_title="Przedziały emerytury",
         yaxis_title="Liczba przypadków",
         height=600,
         hovermode='closest',
-        xaxis={'categoryorder': 'array', 'categoryarray': pension_labels}
+        xaxis={'categoryorder': 'array', 'categoryarray': pension_labels},
+        showlegend=False,
+        margin=dict(t=20, b=40, l=40, r=20)
     )
+    
+    # Usuń kontrolki plotly
+    config = {'displayModeBar': False}
+    fig.update_layout(dragmode=False)
     
     return fig
 
@@ -98,7 +103,6 @@ def plot_pension_by_gender(df: pd.DataFrame) -> go.Figure:
         x='emerytura_urealniona',
         color='plec',
         nbins=25,
-        title='Rozkład emerytury urealnionej według płci',
         labels={
             'emerytura_urealniona': 'Emerytura urealniona (PLN)',
             'count': 'Liczba przypadków',
@@ -111,7 +115,9 @@ def plot_pension_by_gender(df: pd.DataFrame) -> go.Figure:
         xaxis_title="Emerytura urealniona (PLN)",
         yaxis_title="Liczba przypadków",
         height=600,
-        barmode='overlay'
+        barmode='overlay',
+        margin=dict(t=20, b=40, l=40, r=20),
+        dragmode=False
     )
     
     fig.update_traces(opacity=0.7)
@@ -133,7 +139,6 @@ def plot_salary_vs_pension(df: pd.DataFrame) -> go.Figure:
             'absence': True,
             'stopa_zastapienia': ':.2%'
         },
-        title='Wynagrodzenie vs Emerytura urealniona',
         labels={
             'wynagrodzenie_brutto': 'Wynagrodzenie brutto (PLN)',
             'emerytura_urealniona': 'Emerytura urealniona (PLN)',
@@ -142,7 +147,11 @@ def plot_salary_vs_pension(df: pd.DataFrame) -> go.Figure:
         color_discrete_map={'k': 'pink', 'm': 'lightblue'}
     )
     
-    fig.update_layout(height=600)
+    fig.update_layout(
+        height=600,
+        margin=dict(t=20, b=40, l=40, r=20),
+        dragmode=False
+    )
     
     return fig
 
@@ -209,7 +218,11 @@ def create_dashboard(df: pd.DataFrame) -> go.Figure:
         row=2, col=2
     )
     
-    fig.update_layout(height=800, title_text="Dashboard - Analiza danych syntetycznych emerytury")
+    fig.update_layout(
+        height=800,
+        margin=dict(t=20, b=40, l=40, r=20),
+        dragmode=False
+    )
     
     return fig
 
@@ -221,23 +234,27 @@ if __name__ == "__main__":
     print(f"Kolumny: {list(df.columns)}")
     
     # Generuj wykresy
+    config = {
+        'displayModeBar': False,
+        'staticPlot': False,
+        'scrollZoom': False,
+        'doubleClick': False,
+        'showTips': False,
+        'displaylogo': False,
+        'watermark': False
+    }
     fig1 = plot_pension_distribution(df)
-    fig1.show()
-    
+
     fig2 = plot_pension_by_gender(df)
-    fig2.show()
     
     fig3 = plot_salary_vs_pension(df)
-    fig3.show()
     
     # Dashboard
     dashboard = create_dashboard(df)
-    dashboard.show()
+    dashboard.show(config=config)
     
     # Zapisz wykresy do HTML
-    fig1.write_html("pension_distribution.html")
-    fig2.write_html("pension_by_gender.html") 
-    fig3.write_html("salary_vs_pension.html")
-    dashboard.write_html("pension_dashboard.html")
+
+    dashboard.write_html("pension_dashboard.html", config=config)
     
     print("Wykresy zapisane do plików HTML")
