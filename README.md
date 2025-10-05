@@ -2,6 +2,12 @@
 
 Projekt Emerytownik w kategorii ZUS Symulator Emerytalny.
 
+## Live demo
+
+<a href="https://emerytownik.b.solvro.pl"><img width="1233" height="877" alt="image" src="https://github.com/user-attachments/assets/4cad8f09-2d25-42b4-aff3-1948754dd996" /></a>
+
+<https://emerytownik.b.solvro.pl>
+
 ## Zespół
 
 - [Konrad Guzek](https://github.com/kguzek)
@@ -36,6 +42,7 @@ Aplikacja webowa napisana w Next.js, z package managerem pnpm.
 Należy zainstalować Node.js i/lub pnpm'a, można m.in. uzyć `corepack enable`, który sam instaluje wymagany manadżer pakietów. Następnie:
 
 ```bash
+cd frontend
 pnpm i
 pnpm db:generate
 pnpm build
