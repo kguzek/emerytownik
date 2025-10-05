@@ -1,0 +1,21 @@
+[2025-10-05 04:53:03,857][__main__][INFO] - Initializing pipeline
+[2025-10-05 04:53:03,858][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 04:53:03,861][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule
+[2025-10-05 04:53:03,862][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF
+[2025-10-05 04:53:03,863][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\disc_model_MLPClassifier.pt
+[2025-10-05 04:53:03,865][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 04:53:03,866][__main__][INFO] - Loading dataset
+[2025-10-05 04:53:04,017][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 04:53:04,019][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0
+[2025-10-05 04:53:04,021][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_0
+[2025-10-05 04:53:04,022][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0\disc_model_MLPClassifier.pt
+[2025-10-05 04:53:04,022][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 04:53:04,022][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 04:53:04,439][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 04:53:05,953][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 04:53:06,028][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.7368421052631579, 'recall': 1.0, 'f1-score': 0.8484848484848485, 'support': 14.0}, '1': {'precision': 1.0, 'recall': 0.6153846153846154, 'f1-score': 0.7619047619047619, 'support': 13.0}, 'accuracy': 0.8148148148148148, 'macro avg': {'precision': 0.868421052631579, 'recall': 0.8076923076923077, 'f1-score': 0.8051948051948052, 'support': 27.0}, 'weighted avg': {'precision': 0.8635477582846005, 'recall': 0.8148148148148148, 'f1-score': 0.8067981401314734, 'support': 27.0}}
+[2025-10-05 04:53:06,106][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 04:53:06,155][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 04:53:06,156][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 04:53:06,158][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model

@@ -1,0 +1,247 @@
+[2025-10-05 09:27:34,385][__main__][INFO] - Initializing pipeline
+[2025-10-05 09:27:34,386][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:34,389][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule
+[2025-10-05 09:27:34,392][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF
+[2025-10-05 09:27:34,393][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:34,393][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:34,395][__main__][INFO] - Loading dataset
+[2025-10-05 09:27:34,934][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:34,937][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0
+[2025-10-05 09:27:34,941][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_0
+[2025-10-05 09:27:34,941][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:34,942][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_0\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:34,942][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:27:35,028][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:27:36,489][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:27:36,563][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.8888888888888888, 'recall': 0.8888888888888888, 'f1-score': 0.8888888888888888, 'support': 9.0}, '1': {'precision': 0.9090909090909091, 'recall': 0.9090909090909091, 'f1-score': 0.9090909090909091, 'support': 11.0}, 'accuracy': 0.9, 'macro avg': {'precision': 0.898989898989899, 'recall': 0.898989898989899, 'f1-score': 0.898989898989899, 'support': 20.0}, 'weighted avg': {'precision': 0.9, 'recall': 0.9, 'f1-score': 0.9, 'support': 20.0}}
+[2025-10-05 09:27:36,645][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 09:27:36,701][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 09:27:36,701][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:36,704][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:36,743][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Generative model evaluation results:
+ train_ll: 0.0000, test_ll: 0.0000
+[2025-10-05 09:27:37,936][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:27:37,937][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:27:37,944][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:27:37,972][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:27:37,973][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:27:38,497][__main__][INFO] - Counterfactual search time: 0.5231 seconds
+[2025-10-05 09:27:38,503][__main__][INFO] - Counterfactuals saved to: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_0\counterfactuals_PPCEF_MLPClassifier.csv
+[2025-10-05 09:27:38,583][__main__][INFO] - Calculating metrics
+[2025-10-05 09:27:38,588][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,588][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,596][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,597][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,598][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,598][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,599][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,600][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,600][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,601][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,602][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,603][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,603][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,604][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,608][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,609][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,609][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,610][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:38,611][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:38,612][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:38,613][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:40,612][__main__][INFO] - Metrics:
+{'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:40,613][__main__][INFO] - Metrics for fold 0: {'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:40,683][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:40,686][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_1
+[2025-10-05 09:27:40,689][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_1
+[2025-10-05 09:27:40,690][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_1\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:40,691][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_1\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:40,692][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:27:40,701][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:27:40,729][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:27:40,793][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.7777777777777778, 'recall': 0.875, 'f1-score': 0.8235294117647058, 'support': 8.0}, '1': {'precision': 0.9090909090909091, 'recall': 0.8333333333333334, 'f1-score': 0.8695652173913043, 'support': 12.0}, 'accuracy': 0.85, 'macro avg': {'precision': 0.8434343434343434, 'recall': 0.8541666666666667, 'f1-score': 0.8465473145780051, 'support': 20.0}, 'weighted avg': {'precision': 0.8565656565656565, 'recall': 0.85, 'f1-score': 0.851150895140665, 'support': 20.0}}
+[2025-10-05 09:27:40,879][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 09:27:40,945][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 09:27:40,946][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:40,946][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:40,974][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Generative model evaluation results:
+ train_ll: 0.0000, test_ll: 0.0000
+[2025-10-05 09:27:42,097][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:27:42,098][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:27:42,100][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:27:42,123][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:27:42,123][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:27:42,489][__main__][INFO] - Counterfactual search time: 0.3640 seconds
+[2025-10-05 09:27:42,493][__main__][INFO] - Counterfactuals saved to: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_1\counterfactuals_PPCEF_MLPClassifier.csv
+[2025-10-05 09:27:42,545][__main__][INFO] - Calculating metrics
+[2025-10-05 09:27:42,548][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,548][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,548][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,549][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,549][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,550][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,550][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,550][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,551][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,551][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,551][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,551][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,552][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,552][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,553][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,553][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,553][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,554][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:42,554][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:42,554][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:42,555][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:44,528][__main__][INFO] - Metrics:
+{'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:44,529][__main__][INFO] - Metrics for fold 1: {'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:44,593][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:44,595][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_2
+[2025-10-05 09:27:44,595][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_2
+[2025-10-05 09:27:44,596][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_2\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:44,596][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_2\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:44,597][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:27:44,608][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:27:44,637][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:27:44,702][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.7777777777777778, 'recall': 0.875, 'f1-score': 0.8235294117647058, 'support': 8.0}, '1': {'precision': 0.9090909090909091, 'recall': 0.8333333333333334, 'f1-score': 0.8695652173913043, 'support': 12.0}, 'accuracy': 0.85, 'macro avg': {'precision': 0.8434343434343434, 'recall': 0.8541666666666667, 'f1-score': 0.8465473145780051, 'support': 20.0}, 'weighted avg': {'precision': 0.8565656565656565, 'recall': 0.85, 'f1-score': 0.851150895140665, 'support': 20.0}}
+[2025-10-05 09:27:44,790][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 09:27:44,822][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 09:27:44,823][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:44,824][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:44,850][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Generative model evaluation results:
+ train_ll: 0.0000, test_ll: 0.0000
+[2025-10-05 09:27:46,026][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:27:46,027][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:27:46,030][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:27:46,059][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:27:46,059][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:27:46,460][__main__][INFO] - Counterfactual search time: 0.3997 seconds
+[2025-10-05 09:27:46,465][__main__][INFO] - Counterfactuals saved to: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_2\counterfactuals_PPCEF_MLPClassifier.csv
+[2025-10-05 09:27:46,548][__main__][INFO] - Calculating metrics
+[2025-10-05 09:27:46,552][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,554][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,555][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,556][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,556][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,557][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,558][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,558][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,559][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,560][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,560][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,561][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,561][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,562][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,563][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,564][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,564][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,565][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:46,566][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:46,566][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:46,567][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:48,617][__main__][INFO] - Metrics:
+{'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:48,617][__main__][INFO] - Metrics for fold 2: {'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:48,685][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:48,688][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_3
+[2025-10-05 09:27:48,690][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_3
+[2025-10-05 09:27:48,690][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_3\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:48,691][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_3\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:48,692][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:27:48,704][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:27:48,739][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:27:48,799][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.7777777777777778, 'recall': 0.875, 'f1-score': 0.8235294117647058, 'support': 8.0}, '1': {'precision': 0.9090909090909091, 'recall': 0.8333333333333334, 'f1-score': 0.8695652173913043, 'support': 12.0}, 'accuracy': 0.85, 'macro avg': {'precision': 0.8434343434343434, 'recall': 0.8541666666666667, 'f1-score': 0.8465473145780051, 'support': 20.0}, 'weighted avg': {'precision': 0.8565656565656565, 'recall': 0.85, 'f1-score': 0.851150895140665, 'support': 20.0}}
+[2025-10-05 09:27:48,882][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 09:27:48,945][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 09:27:48,946][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:48,946][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:48,977][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Generative model evaluation results:
+ train_ll: 0.0000, test_ll: 0.0000
+[2025-10-05 09:27:50,131][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:27:50,133][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:27:50,136][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:27:50,164][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:27:50,165][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:27:50,586][__main__][INFO] - Counterfactual search time: 0.4206 seconds
+[2025-10-05 09:27:50,591][__main__][INFO] - Counterfactuals saved to: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_3\counterfactuals_PPCEF_MLPClassifier.csv
+[2025-10-05 09:27:50,676][__main__][INFO] - Calculating metrics
+[2025-10-05 09:27:50,680][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,681][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,682][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,683][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,684][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,685][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,686][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,686][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,687][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,688][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,689][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,690][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,691][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,692][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,693][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,694][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,695][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,696][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:50,697][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:50,697][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:50,699][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:52,633][__main__][INFO] - Metrics:
+{'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:52,634][__main__][INFO] - Metrics for fold 3: {'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:52,701][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:27:52,704][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_4
+[2025-10-05 09:27:52,705][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_4
+[2025-10-05 09:27:52,708][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_4\disc_model_MLPClassifier.pt
+[2025-10-05 09:27:52,708][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\fold_4\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:27:52,709][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:27:52,723][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:27:52,752][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:27:52,809][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.7777777777777778, 'recall': 0.875, 'f1-score': 0.8235294117647058, 'support': 8.0}, '1': {'precision': 0.9090909090909091, 'recall': 0.8333333333333334, 'f1-score': 0.8695652173913043, 'support': 12.0}, 'accuracy': 0.85, 'macro avg': {'precision': 0.8434343434343434, 'recall': 0.8541666666666667, 'f1-score': 0.8465473145780051, 'support': 20.0}, 'weighted avg': {'precision': 0.8565656565656565, 'recall': 0.85, 'f1-score': 0.851150895140665, 'support': 20.0}}
+[2025-10-05 09:27:52,896][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Creating generative model
+[2025-10-05 09:27:52,957][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Loading generative model (PyTorch Lightning)
+[2025-10-05 09:27:52,958][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:52,958][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Evaluating generative model
+[2025-10-05 09:27:52,991][counterfactuals.pipelines.nodes.gen_model_nodes][INFO] - Generative model evaluation results:
+ train_ll: 0.0000, test_ll: 0.0000
+[2025-10-05 09:27:54,068][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:27:54,069][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:27:54,073][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:27:54,091][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:27:54,091][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:27:54,412][__main__][INFO] - Counterfactual search time: 0.3190 seconds
+[2025-10-05 09:27:54,417][__main__][INFO] - Counterfactuals saved to: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF\fold_4\counterfactuals_PPCEF_MLPClassifier.csv
+[2025-10-05 09:27:54,491][__main__][INFO] - Calculating metrics
+[2025-10-05 09:27:54,494][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,495][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,495][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,496][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,496][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,496][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,496][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,497][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,497][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,497][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,498][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,499][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,499][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,499][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,500][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,502][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,502][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,503][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:54,503][counterfactuals.metrics.distances][INFO] - Calculating combined distance
+[2025-10-05 09:27:54,505][counterfactuals.metrics.distances][INFO] - Calculating continuous distance
+[2025-10-05 09:27:54,506][counterfactuals.metrics.distances][INFO] - Calculating categorical distance
+[2025-10-05 09:27:56,271][__main__][INFO] - Metrics:
+{'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}
+[2025-10-05 09:27:56,272][__main__][INFO] - Metrics for fold 4: {'coverage': np.float64(1.0), 'validity': np.float64(0.16666666666666666), 'actionability': np.float64(0.75), 'sparsity': np.float64(0.25), 'proximity_categorical_hamming': np.float64(0.20159998536174314), 'proximity_categorical_jaccard': np.float64(0.20159998536174314), 'proximity_continuous_manhattan': np.float64(0.20319997072219845), 'proximity_continuous_euclidean': np.float64(0.20159998536174314), 'proximity_continuous_mad': np.float64(0.20524806138128038), 'proximity_l2_jaccard': np.float64(0.20159998536174314), 'proximity_mad_hamming': np.float64(0.20524806138128038), 'prob_plausibility': np.float64(0.3333333333333333), 'log_density_cf': np.float64(0.3333333333333333), 'log_density_test': np.float64(0.25), 'lof_scores_cf': np.float32(1.0731361), 'lof_scores_test': np.float32(1.073141), 'isolation_forest_scores_cf': np.float64(-0.0022703693666614546), 'isolation_forest_scores_test': np.float64(-0.0023092036625905477)}

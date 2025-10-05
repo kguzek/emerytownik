@@ -1,0 +1,7 @@
+[2025-10-05 02:40:01,229][__main__][INFO] - Initializing pipeline
+[2025-10-05 02:40:01,231][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 02:40:01,234][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule
+[2025-10-05 02:40:01,236][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF
+[2025-10-05 02:40:01,237][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\disc_model_MLPClassifier.pt
+[2025-10-05 02:40:01,238][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 02:40:01,238][__main__][INFO] - Loading dataset

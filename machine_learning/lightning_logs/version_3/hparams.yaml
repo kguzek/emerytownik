@@ -1,0 +1,7 @@
+dropout: 0.2
+hidden_dims:
+- 128
+- 64
+- 32
+input_dim: 5
+learning_rate: 0.001

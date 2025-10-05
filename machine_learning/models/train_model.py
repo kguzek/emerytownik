@@ -5,25 +5,12 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import accuracy_score
 import numpy as np
-
-
-class CSVDataset(Dataset):
-    """Dataset do wczytywania danych z CSV"""
-    def __init__(self, X, y):
-        self.X = torch.FloatTensor(X)
-        self.y = torch.FloatTensor(y)
-    
-    def __len__(self):
-        return len(self.X)
-    
-    def __getitem__(self, idx):
-        return self.X[idx], (self.y[idx] > torch.randint(5_000, 7_500, size=(1, ))).float().squeeze()
-
+from DataModule import DataModule, CSVDataset, ColumnPreprocessor
 
 class MLPClassifier(pl.LightningModule):
     def __init__(self, input_dim, hidden_dims, learning_rate=0.001, dropout=0.2):
@@ -145,90 +132,6 @@ class MLPClassifier(pl.LightningModule):
         }
 
 
-class ColumnPreprocessor:
-    def __init__(self, categorical_columns=None, numerical_columns=None):
-        self.categorical_columns = categorical_columns or []
-        self.numerical_columns = numerical_columns or []
-        self.preprocessor = None
-        
-    def fit_transform(self, df):
-        transformers = []
-        
-        if self.numerical_columns:
-            transformers.append(
-                ('num', StandardScaler(), self.numerical_columns)
-            )
-        
-        if self.categorical_columns:
-            transformers.append(
-                ('cat', OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore'), 
-                 self.categorical_columns)
-            )
-        
-        if not transformers:
-            raise ValueError("At least one of categorical_columns or numerical_columns must be provided")
-        
-        self.preprocessor = ColumnTransformer(
-            transformers=transformers,
-            remainder='drop'
-        )
-        
-        return self.preprocessor.fit_transform(df)
-    
-    def transform(self, df):
-        if self.preprocessor is None:
-            raise ValueError("Preprocessor must be fitted first. Call fit_transform() before transform()")
-        return self.preprocessor.transform(df)
-
-
-class DataModule(pl.LightningDataModule):
-    def __init__(self, csv_path, target_column,  categorical_columns=None, numerical_columns=None, batch_size=32, test_size=0.2, val_size=0.1, random_state=42):
-        super().__init__()
-        self.csv_path = csv_path
-        self.target_column = target_column
-        self.categorical_columns = categorical_columns or []
-        self.numerical_columns = numerical_columns or []
-        self.batch_size = batch_size
-        self.test_size = test_size
-        self.val_size = val_size
-        self.random_state = random_state
-        self.preprocessor = ColumnPreprocessor(categorical_columns, numerical_columns)
-
-    def setup(self, stage=None):
-        df = pd.read_csv(self.csv_path)
-
-        X = df.drop(columns=[self.target_column])
-        y = df[self.target_column].values
-        
-        X_temp, X_test, y_temp, y_test = train_test_split(
-            X, y, test_size=self.test_size, random_state=self.random_state
-        )
-        
-        val_ratio = self.val_size / (1 - self.test_size)
-        X_train, X_val, y_train, y_val = train_test_split(
-            X_temp, y_temp, test_size=val_ratio, random_state=self.random_state
-        )
-        
-        X_train = self.preprocessor.fit_transform(X_train)
-        X_val = self.preprocessor.transform(X_val)
-        X_test = self.preprocessor.transform(X_test)
-        
-        self.train_dataset = CSVDataset(X_train, y_train)
-        self.val_dataset = CSVDataset(X_val, y_val)
-        self.test_dataset = CSVDataset(X_test, y_test)
-        
-        self.input_dim = X_train.shape[1]
-    
-    def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4)
-    
-    def val_dataloader(self):
-        return DataLoader(self.val_dataset, batch_size=self.batch_size, num_workers=4)
-    
-    def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=4)
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Trening sieci MLP do klasyfikacji binarnej w PyTorch Lightning')
     
@@ -242,7 +145,7 @@ def parse_args():
     parser.add_argument('--dropout', type=float, default=0.2, help='Współczynnik dropout')
     parser.add_argument('--categorical_columns', type=str, nargs='*', default=["plec"], 
                         help='Nazwy kolumn kategorycznych do one-hot encoding')
-    parser.add_argument('--numerical_columns', type=str, nargs='*', default=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek",], 
+    parser.add_argument('--numerical_columns', type=str, nargs='*', default=["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek"], 
                         help='Nazwy kolumn numerycznych do standaryzacji')
     
     parser.add_argument('--batch_size', type=int, default=32, help='Rozmiar batcha')

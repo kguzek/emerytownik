@@ -1,4 +1,9 @@
 from typing import Literal, Optional
+import numpy as np
+
+LOWER_LIMIT = 5_000
+UPPER_LIMIT = 15_000
+np.random.seed(42)
 
 import pandas as pd
 
@@ -66,6 +71,7 @@ def wylicz_emeryture(
     suma_wplaconych_skladek: float = 0.0,
     wiek: Optional[int] = None,
     absence: Optional[bool] = False,
+    dzielnik_csv_path: str = "Parametry-III 2025 - e_x M i K-PROGNOZA.csv"
 ) -> dict:
     """
     Wylicza prognozowaną miesięczną emeryturę według ZUS, uwzględniając inflację i minimalną emeryturę.
@@ -74,7 +80,7 @@ def wylicz_emeryture(
     # Przyjmujemy wiek emerytalny: wiek = 60 (k) lub 65 (m) jeśli nie podano
     if wiek is None:
         wiek = 60 if plec == "k" else 65
-    dzielnik = get_dzielnik(rok_zakonczenia, wiek)
+    dzielnik = get_dzielnik(rok_zakonczenia, wiek, csv_path=dzielnik_csv_path)
 
     if df is None:
         df = load_parameters(csv_path="Parametry-III 2025 - parametry roczne.csv")
@@ -242,6 +248,10 @@ def wylicz_emeryture(
     }
 
 
+def jest_zadowolony(df: pd.DataFrame):
+    df['zadowolony'] = df['emerytura_nominalna'] > np.random.randint(LOWER_LIMIT, UPPER_LIMIT)
+
+
 # PRZYKŁAD UŻYCIA:
 if __name__ == "__main__":
     import numpy as np
@@ -289,6 +299,11 @@ if __name__ == "__main__":
             "emerytura_nominalna": wynik["emerytura_nominalna"],
         }
         results.append(row)
+    
+    df = pd.DataFrame(results)
+    jest_zadowolony(df)
+    df.to_csv("synthetic_data.csv", index=False)
+    print(f"Zapisano {n} rekordów do synthetic_data.csv")
 
         plotting_row = {
             "plec": plec,

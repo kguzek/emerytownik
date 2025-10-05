@@ -1,0 +1,18 @@
+[2025-10-05 09:47:58,156][__main__][INFO] - Initializing pipeline
+[2025-10-05 09:47:58,157][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Setting model paths
+[2025-10-05 09:47:58,160][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Creatied output folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule
+[2025-10-05 09:47:58,161][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Created save folder C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\PPCEF
+[2025-10-05 09:47:58,162][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Disc model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\disc_model_MLPClassifier.pt
+[2025-10-05 09:47:58,164][counterfactuals.pipelines.nodes.helper_nodes][INFO] - Gen model path: C:\Users\julia\VSCode\hackyeah2025\machine_learning\models\DataModule\gen_model_EmeryturaModel_relabeled_by_MLPClassifier.pt
+[2025-10-05 09:47:58,164][__main__][INFO] - Loading dataset
+[2025-10-05 09:47:58,184][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Creating discriminator model
+[2025-10-05 09:47:58,198][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Loading discriminator model (PyTorch Lightning)
+[2025-10-05 09:47:59,977][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Evaluating discriminator model
+[2025-10-05 09:48:00,055][counterfactuals.pipelines.nodes.disc_model_nodes][INFO] - Discriminator model evaluation results:
+ {'0': {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 2.0}, '1': {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 0.0}, 'accuracy': 0.0, 'macro avg': {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 2.0}, 'weighted avg': {'precision': 0.0, 'recall': 0.0, 'f1-score': 0.0, 'support': 2.0}}
+[2025-10-05 09:48:00,067][__main__][INFO] - Filtering out target class data for counterfactual generation
+[2025-10-05 09:48:00,067][__main__][INFO] - Creating counterfactual model
+[2025-10-05 09:48:00,071][__main__][INFO] - Calculating log_prob_threshold
+[2025-10-05 09:48:00,092][__main__][INFO] - log_prob_threshold: 0.0000
+[2025-10-05 09:48:00,092][__main__][INFO] - Handling counterfactual generation
+[2025-10-05 09:48:00,214][__main__][INFO] - Counterfactual search time: 0.1198 seconds

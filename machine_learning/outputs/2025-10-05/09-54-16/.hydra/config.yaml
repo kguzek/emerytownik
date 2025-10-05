@@ -1,0 +1,47 @@
+experiment:
+  output_folder: models/
+  relabel_with_disc_model: true
+dataset:
+  _target_: counterfactuals.datasets.DataModule
+  csv_path: data\synthetic_data.csv
+  target_column: zadowolony
+  save_preprocessing_module: true
+  preprocessing_module_path: ./checkpoints/data_module_preprocessing.pkl
+  test_path: data\synthetic_data_TEST.csv
+  random_state: 42
+disc_model:
+  _target_: counterfactuals.models.MLPClassifier
+  hidden_dims:
+  - 128
+  - 64
+  - 32
+  train_model: false
+  pretrained_path: ./checkpoints/mlp-epoch=20-val_loss=0.0407.ckpt
+gen_model:
+  _target_: counterfactuals.models.EmeryturaModel
+  param_csv_path: data\Parametry-III 2025 - parametry roczne.csv
+  train_model: false
+  batch_size: 1024
+  pretrained_path: ./checkpoints/emerytura_model.pkl
+  noise_lvl: 0.02
+counterfactuals_params:
+  cf_method:
+    _target_: counterfactuals.cf_methods.PPCEF
+    use_categorical: false
+    zero_grad_dims:
+    - 0
+    - 2
+    save_folder: ./checkpoints/ppcef/
+  disc_model_criterion:
+    _target_: counterfactuals.losses.BinaryDiscLoss
+  log_prob_quantile: 0.25
+  target_class: 0
+  epochs: 10
+  batch_size: 1024
+  lr: 0.001
+  alpha: 1000
+  alpha_s: 1000
+  alpha_k: 100
+  beta: 0.01
+  patience: 10
+  use_categorical: true
