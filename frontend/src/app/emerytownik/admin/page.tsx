@@ -3,6 +3,9 @@ import { API_URL } from "@/config/constants";
 
 import { Panel } from "./panel";
 
+// this ensures the route is marked as non-static to prevent build errors
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   let data = [];
   try {
