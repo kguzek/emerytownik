@@ -8,12 +8,6 @@ import { GraduationCap, Target, TrendingUp, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-const cardVariants = {
-  hiddenLeft: { opacity: 0, x: -50 },
-  hiddenRight: { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0 },
-};
-
 export default function IntroZUS() {
   const cards = [
     {
