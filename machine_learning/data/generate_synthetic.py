@@ -51,11 +51,11 @@ def get_dzielnik(year: int, age: int, csv_path: str = "Parametry-III 2025 - e_x 
     return float(val)
 
 def wylicz_emeryture(
-    df: pd.DataFrame,
     plec: Literal["k", "m"],
     wynagrodzenie_brutto: float,
     rok_rozpoczecia: int,
     rok_zakonczenia: int,
+    df: pd.DataFrame = None,
     kapital_poczatkowy: float = 0.0,
     suma_wplaconych_skladek: float = 0.0,
     wiek: Optional[int] = None,
@@ -69,6 +69,9 @@ def wylicz_emeryture(
     if wiek is None:
         wiek = 60 if plec == "k" else 65
     dzielnik = get_dzielnik(rok_zakonczenia, wiek)
+
+    if df is None:
+        df = load_parameters()
 
     konto = 0.0
     subkonto = 0.0
