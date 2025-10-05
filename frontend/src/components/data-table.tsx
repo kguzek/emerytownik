@@ -10,15 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { API_RESULT_LABELS } from "@/config/constants";
 import { downloadFile } from "@/lib/download";
 import { cn } from "@/lib/utils";
 
 import { Button } from "./ui/button";
 
+const AVERAGE_EMERYTURA = 3986.91;
+
+const hasLabel = (key: string): key is keyof typeof API_RESULT_LABELS =>
+  key in API_RESULT_LABELS;
+
 export function DataTable({ data }: { data: ApiResult }) {
   return (
     <Table>
       <TableCaption>
+        <div className="mb-4">Więcej danych można pobrać klikając poniższy przycisk.</div>
         <Button
           className="mx-auto w-fit"
           onClick={() => {
@@ -35,22 +42,28 @@ export function DataTable({ data }: { data: ApiResult }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Object.entries(data).map(([key, value], index) => (
-          <TableRow
-            key={key}
-            className={cn(index % 2 === 0 ? "bg-white" : "bg-orange/25")}
-          >
-            <TableCell className="w-lg font-medium">{key}</TableCell>
-            <TableCell>
-              {["stopa_zastapienia", "inflacja_cum"].includes(key)
-                ? `${value.toFixed(2)}%`
-                : new Intl.NumberFormat("pl-PL", {
-                    style: "currency",
-                    currency: "PLN",
-                  }).format(value)}
-            </TableCell>
-          </TableRow>
-        ))}
+        {[...Object.entries(data), ["srednia_emerytura", AVERAGE_EMERYTURA] as const]
+          .filter(([key]) => hasLabel(key))
+          .map(([key, value], index) =>
+            hasLabel(key) ? (
+              <TableRow
+                key={key}
+                className={cn(index % 2 === 0 ? "bg-white" : "bg-orange/25")}
+              >
+                <TableCell className="w-lg font-medium">
+                  {API_RESULT_LABELS[key]}
+                </TableCell>
+                <TableCell>
+                  {["stopa_zastapienia", "inflacja_cum"].includes(key)
+                    ? `${value.toFixed(2)}%`
+                    : new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      }).format(value)}
+                </TableCell>
+              </TableRow>
+            ) : null,
+          )}
       </TableBody>
     </Table>
   );
