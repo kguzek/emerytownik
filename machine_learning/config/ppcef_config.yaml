@@ -12,15 +12,13 @@ experiment:
   relabel_with_disc_model: true
 
 dataset:
-  _target_: models.DataModule
+  _target_: counterfactuals.datasets.DataModule
   csv_path: data\synthetic_data.csv
   target_column: emerytura_nominalna
   categorical_columns: ["plec"]
   numerical_columns: ["wynagrodzenie_brutto","rok_rozpoczecia","rok_zakonczenia","suma_wplaconych_skladek",]
-  batch_size: 32
-  test_size: 0.2
-  val_size: 0.1
   random_state: 42
+
 
 disc_model:
   _target_: machine_learning.models.MLPClassifier

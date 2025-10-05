@@ -24,6 +24,7 @@ class ColumnPreprocessor:
         self.categorical_columns = categorical_columns or []
         self.numerical_columns = numerical_columns or []
         self.preprocessor = None
+        print(">>> Init preprocessor with cat:", self.categorical_columns, "num:", self.numerical_columns)
         
     def fit_transform(self, df):
         transformers = []
