@@ -2,16 +2,25 @@ import { DataTable } from "@/components/data-table";
 import { Spinner } from "@/components/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCalculator } from "@/hooks/use-calculator";
+import { cn } from "@/lib/utils";
+
+function FullscreenSpinner({ label }: { label: string }) {
+  return (
+    <div className="flex h-[620px] w-full items-center justify-center">
+      <Spinner label={label} />
+    </div>
+  );
+}
 
 export function Graphs() {
   const { state } = useCalculator();
 
   return state === "graph" ? (
-    <iframe src="/pension_dashboard.html" className="h-[620px] w-10/12" />
+    <>
+      <iframe src="/pension_dashboard.html" className={cn("h-[620px] w-10/12")} />
+    </>
   ) : state === "loading" ? (
-    <div className="flex h-[620px] w-full items-center justify-center">
-      <Spinner />
-    </div>
+    <FullscreenSpinner label="Trwa przetwarzanie..." />
   ) : state === "error" ? (
     <div className="flex h-[620px] w-full flex-col items-center justify-center">
       <p>Wystąpił błąd podczas generowania danych.</p>
