@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 def load_synthetic_data(csv_path: str = "synthetic_plotting_data.csv") -> pd.DataFrame:
-    """Wczytaj wygenerowane dane syntetyczne."""
+    """Wczytaj wygenerowane dane syntetyczne przygotowane do wykresów."""
     return pd.read_csv(csv_path)
 
 def plot_pension_distribution(df: pd.DataFrame) -> go.Figure:
@@ -127,7 +127,6 @@ def plot_salary_vs_pension(df: pd.DataFrame) -> go.Figure:
         x='wynagrodzenie_brutto',
         y='emerytura_urealniona',
         color='plec',
-        size='suma_skladek',
         hover_data={
             'rok_rozpoczecia': True,
             'rok_zakonczenia': True,
@@ -138,8 +137,7 @@ def plot_salary_vs_pension(df: pd.DataFrame) -> go.Figure:
         labels={
             'wynagrodzenie_brutto': 'Wynagrodzenie brutto (PLN)',
             'emerytura_urealniona': 'Emerytura urealniona (PLN)',
-            'plec': 'Płeć',
-            'suma_skladek': 'Suma składek'
+            'plec': 'Płeć'
         },
         color_discrete_map={'k': 'pink', 'm': 'lightblue'}
     )
@@ -189,7 +187,7 @@ def create_dashboard(df: pd.DataFrame) -> go.Figure:
             mode='markers',
             marker=dict(
                 color=df['plec'].map({'k': 'pink', 'm': 'lightblue'}),
-                size=df['suma_skladek']/10000,
+                size=8,
                 opacity=0.7
             ),
             name="Wynagrodzenie vs Emerytura"
