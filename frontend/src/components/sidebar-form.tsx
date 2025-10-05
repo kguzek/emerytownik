@@ -22,7 +22,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 export function SidebarForm() {
-  const { setState } = useCalculator();
+  const { setState, target } = useCalculator();
 
   const form = useForm<DetailsFormValues>({
     defaultValues: {
@@ -51,6 +51,7 @@ export function SidebarForm() {
             endYear,
             data: await generateSyntheticData({
               ...data,
+              targetEmerytura: target,
               ignore: offset === 0 ? "false" : "true",
               expectedEmployedUntilYear: endYear,
             }),

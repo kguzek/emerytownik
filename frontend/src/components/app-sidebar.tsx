@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Home, Settings, SquareSigma } from "lucide-react";
 
@@ -11,7 +13,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useCalculator } from "@/hooks/use-calculator";
 
+import { RetirementPlanner } from "./retirement-planner";
 import { SidebarForm } from "./sidebar-form";
 
 // Menu items.
@@ -34,6 +38,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { targetSkipped } = useCalculator();
   return (
     <Sidebar>
       <SidebarContent className="bg-gray/30">
@@ -57,7 +62,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Dane użytkownika</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarForm />
+            {targetSkipped ? <SidebarForm /> : <RetirementPlanner />}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

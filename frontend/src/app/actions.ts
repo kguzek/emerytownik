@@ -1,9 +1,9 @@
 "use server";
 
-import type { ApiResult, DetailsFormValues } from "@/lib/types";
+import type { ApiResult, DetailsFormValuesWithTarget } from "@/lib/types";
 import { API_URL } from "@/config/constants";
 
-export async function generateSyntheticData(data: DetailsFormValues) {
+export async function generateSyntheticData(data: DetailsFormValuesWithTarget) {
   const response = await fetch(`${API_URL}/calculate`, {
     method: "POST",
     headers: {

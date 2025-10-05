@@ -10,13 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { API_RESULT_LABELS } from "@/config/constants";
+import { API_RESULT_LABELS, AVERAGE_EMERYTURA } from "@/config/constants";
 import { downloadFile } from "@/lib/download";
+import { formatCurrency } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
 
 import { Button } from "./ui/button";
-
-const AVERAGE_EMERYTURA = 3986.91;
 
 const hasLabel = (key: string): key is keyof typeof API_RESULT_LABELS =>
   key in API_RESULT_LABELS;
@@ -56,10 +55,7 @@ export function DataTable({ data }: { data: ApiResult }) {
                 <TableCell>
                   {["stopa_zastapienia", "inflacja_cum"].includes(key)
                     ? `${value.toFixed(2)}%`
-                    : new Intl.NumberFormat("pl-PL", {
-                        style: "currency",
-                        currency: "PLN",
-                      }).format(value)}
+                    : formatCurrency(value)}
                 </TableCell>
               </TableRow>
             ) : null,

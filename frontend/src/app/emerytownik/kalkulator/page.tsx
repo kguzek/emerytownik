@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { Navbar } from "@/components/navbar";
+import { RetirementPlanner } from "@/components/retirement-planner";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { CalculatorProvider } from "@/hooks/use-calculator";

@@ -31,3 +31,7 @@ export interface ApiResult {
 export type AdminRecord = ApiResult & {
   generated_at: string;
 } & DetailsFormValues;
+
+export interface DetailsFormValuesWithTarget extends DetailsFormValues {
+  targetEmerytura: number | null;
+}

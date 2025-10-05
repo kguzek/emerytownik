@@ -17,3 +17,5 @@ export const API_RESULT_LABELS: Partial<
   suma_skladek: "Suma składek",
   srednia_emerytura: "Średnia emerytura",
 };
+
+export const AVERAGE_EMERYTURA = 3986.91;
