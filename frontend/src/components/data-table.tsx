@@ -29,7 +29,7 @@ export function DataTable({ data }: { data: ApiResult }) {
         <Button
           className="mx-auto w-fit"
           onClick={() => {
-            downloadFile([data]);
+            downloadFile([data], "raport_1");
           }}
         >
           <Download /> Pobierz

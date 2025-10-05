@@ -15,7 +15,7 @@ export function Panel({ data }: { data: AdminRecord[] }) {
     <>
       <p>Liczba zapytań użytkowników: {data.length}</p>
       <div className="">
-        <DownloadRecords data={data} filename="records.json" />
+        <DownloadRecords data={data} />
       </div>
     </>
   ) : (

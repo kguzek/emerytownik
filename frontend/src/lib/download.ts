@@ -1,15 +1,15 @@
 import xlsx from "json-as-xlsx";
 
-import type { ApiResult } from "./types";
+import type { AdminRecord, ApiResult } from "./types";
 
-const DOWNLOAD_SETTINGS = {
-  fileName: "raport_1", // Name of the resulting spreadsheet
-  extraLength: 3, // A bigger number means that columns will be wider
-  writeMode: "writeFile", // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
-  writeOptions: {}, // Style options from https://docs.sheetjs.com/docs/api/write-options
-};
+export function downloadFile(data: (AdminRecord | ApiResult)[], filename: string) {
+  const settings = {
+    fileName: filename, // Name of the resulting spreadsheet
+    extraLength: 3, // A bigger number means that columns will be wider
+    writeMode: "writeFile", // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+    writeOptions: {}, // Style options from https://docs.sheetjs.com/docs/api/write-options
+  };
 
-export function downloadFile(data: ApiResult[]) {
   xlsx(
     data.map((item, index) => ({
       sheet: `Wyniki ${index + 1}`,
@@ -22,6 +22,6 @@ export function downloadFile(data: ApiResult[]) {
         wartosc: value,
       })),
     })),
-    DOWNLOAD_SETTINGS,
+    settings,
   );
 }
