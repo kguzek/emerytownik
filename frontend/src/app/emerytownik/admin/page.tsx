@@ -6,7 +6,9 @@ import { Panel } from "./panel";
 export default async function AdminPage() {
   let data = [];
   try {
-    const response = await fetch(`${API_URL}/records`, { next: { revalidate: 5 } });
+    const response = await fetch(`${API_URL}/records`, {
+      cache: "no-store",
+    });
     data = await response.json();
   } catch (error) {
     console.error("Error fetching data:", error);
