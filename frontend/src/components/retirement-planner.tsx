@@ -18,6 +18,7 @@ export function RetirementPlanner() {
       <Label className="mt-4 mb-2 flex flex-col items-start gap-1">
         Wpisz kwotę w PLN
         <Input
+          type="number"
           value={target ?? ""}
           onChange={(event_) => {
             setTarget(

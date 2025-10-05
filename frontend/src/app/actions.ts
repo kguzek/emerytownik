@@ -1,5 +1,3 @@
-"use server";
-
 import type { ApiResult, DetailsFormValuesWithTarget } from "@/lib/types";
 import { API_URL } from "@/config/constants";
 

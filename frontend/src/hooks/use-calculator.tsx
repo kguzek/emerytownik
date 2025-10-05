@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import type { ApiResult } from "@/lib/types";
+import type { ApiResult, DetailsFormValues } from "@/lib/types";
 
 type State = "graph" | "loading" | "error" | { endYear: number; data: ApiResult }[];
 
@@ -11,6 +11,8 @@ interface CalculatorContextType {
   setTarget: (target: number | null) => void;
   targetSkipped: boolean;
   setTargetSkipped: (skipped: boolean) => void;
+  details: DetailsFormValues | null;
+  setDetails: (details: DetailsFormValues | null) => void;
 }
 
 const CalculatorContext = createContext<CalculatorContextType | undefined>(undefined);
@@ -19,10 +21,20 @@ export const CalculatorProvider = ({ children }: { children: React.ReactNode }) 
   const [state, setState] = useState<State>("graph");
   const [target, setTarget] = useState<number | null>(null);
   const [targetSkipped, setTargetSkipped] = useState(false);
+  const [details, setDetails] = useState<DetailsFormValues | null>(null);
 
   return (
     <CalculatorContext.Provider
-      value={{ state, setState, target, setTarget, targetSkipped, setTargetSkipped }}
+      value={{
+        state,
+        setState,
+        target,
+        setTarget,
+        targetSkipped,
+        setTargetSkipped,
+        details,
+        setDetails,
+      }}
     >
       {children}
     </CalculatorContext.Provider>

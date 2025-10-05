@@ -22,7 +22,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 export function SidebarForm() {
-  const { setState, target } = useCalculator();
+  const { setState, target, setDetails } = useCalculator();
 
   const form = useForm<DetailsFormValues>({
     defaultValues: {
@@ -41,7 +41,9 @@ export function SidebarForm() {
 
   async function handleSubmit(data: DetailsFormValues) {
     setState("loading");
+    setDetails(data);
     const yearOffsets = [0, 3, 5];
+
     try {
       const results = await Promise.all(
         yearOffsets.map(async (offset) => {
