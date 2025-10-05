@@ -12,6 +12,11 @@ export function Graphs() {
     <div className="flex h-[620px] w-full items-center justify-center">
       <Spinner />
     </div>
+  ) : state === "error" ? (
+    <div className="flex h-[620px] w-full flex-col items-center justify-center">
+      <p>Wystąpił błąd podczas generowania danych.</p>
+      <p>Proszę spróbuj ponownie.</p>
+    </div>
   ) : (
     <div className="bg-gray/20 mx-20 rounded-md p-2">
       <Tabs

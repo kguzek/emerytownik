@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import type { DetailsFormValues } from "@/lib/types";
 import { generateSyntheticData } from "@/app/actions";
@@ -39,27 +40,38 @@ export function SidebarForm() {
   async function handleSubmit(data: DetailsFormValues) {
     setState("loading");
     const yearOffsets = [0, 3, 5];
-    const results = await Promise.all(
-      yearOffsets.map(async (offset) => {
-        const endYear = data.expectedEmployedUntilYear + offset;
+    try {
+      const results = await Promise.all(
+        yearOffsets.map(async (offset) => {
+          const endYear = data.expectedEmployedUntilYear + offset;
 
-        return {
-          endYear,
-          data: await generateSyntheticData({
-            ...data,
-            expectedEmployedUntilYear: endYear,
-          }),
-        };
-      }),
-    );
-    setState(results);
+          return {
+            endYear,
+            data: await generateSyntheticData({
+              ...data,
+              expectedEmployedUntilYear: endYear,
+            }),
+          };
+        }),
+      );
+      setState(results);
+    } catch (error) {
+      setState("error");
+      throw error;
+    }
   }
 
   return (
     <Form {...form}>
       <form
         className="flex flex-col items-stretch gap-2 rounded-md bg-white p-4"
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit((values) =>
+          toast.promise(handleSubmit(values), {
+            loading: "Trwa obliczanie...",
+            success: "Obliczono pomyślnie!",
+            error: "Skonfigurowano błędne dane",
+          }),
+        )}
       >
         <FormField
           control={form.control}
@@ -70,7 +82,14 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Rok urodzenia
-                  <Input type="number" min={1900} step={1} required {...field} />
+                  <Input
+                    type="number"
+                    min={1900}
+                    step={1}
+                    required
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />
@@ -87,7 +106,14 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Rok rozpoczęcia pracy
-                  <Input type="number" min={1900} step={1} required {...field} />
+                  <Input
+                    type="number"
+                    min={1900}
+                    step={1}
+                    required
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />
@@ -104,7 +130,14 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Wysokość miesięcznego wynagrodzenia (brutto, zł)
-                  <Input type="number" min={0} step={0.01} required {...field} />
+                  <Input
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    required
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />
@@ -121,7 +154,14 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Przewidywany rok zakończenia pracy
-                  <Input type="number" min={1900} step={1} required {...field} />
+                  <Input
+                    type="number"
+                    min={1900}
+                    step={1}
+                    required
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />
@@ -138,7 +178,15 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Przewidywany wiek emerytalny
-                  <Input type="number" min={50} max={100} step={1} required {...field} />
+                  <Input
+                    type="number"
+                    min={50}
+                    max={100}
+                    step={1}
+                    required
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />
@@ -155,7 +203,13 @@ export function SidebarForm() {
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
                   Oszczędności na start (opcjonalne, zł)
-                  <Input type="number" min={0} step={1} {...field} />
+                  <Input
+                    type="number"
+                    min={0}
+                    step={1}
+                    {...field}
+                    onChange={(value) => field.onChange(Number(value.target.value))}
+                  />
                 </Label>
               </FormControl>
               <FormDescription />

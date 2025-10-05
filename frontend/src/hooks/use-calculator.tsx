@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 import type { ApiResult } from "@/lib/types";
 
-type State = "graph" | "loading" | { endYear: number; data: ApiResult }[];
+type State = "graph" | "loading" | "error" | { endYear: number; data: ApiResult }[];
 
 interface CalculatorContextType {
   state: State;
