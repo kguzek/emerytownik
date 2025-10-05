@@ -22,8 +22,11 @@ export function DataTable({ data }: { data: ApiResult }) {
       </TableHeader>
       <TableBody>
         {Object.entries(data).map(([key, value], index) => (
-          <TableRow key={key} className={cn(index % 2 === 0 ? "bg-white" : "bg-gray/20")}>
-            <TableCell className="font-medium">{key}</TableCell>
+          <TableRow
+            key={key}
+            className={cn(index % 2 === 0 ? "bg-white" : "bg-orange/25")}
+          >
+            <TableCell className="w-lg font-medium">{key}</TableCell>
             <TableCell className="">
               {new Intl.NumberFormat("pl-PL", {
                 style: "currency",

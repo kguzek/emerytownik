@@ -38,8 +38,21 @@ export function SidebarForm() {
 
   async function handleSubmit(data: DetailsFormValues) {
     setState("loading");
-    const result = await generateSyntheticData(data);
-    setState(result);
+    const yearOffsets = [0, 3, 5];
+    const results = await Promise.all(
+      yearOffsets.map(async (offset) => {
+        const endYear = data.expectedEmployedUntilYear + offset;
+
+        return {
+          endYear,
+          data: await generateSyntheticData({
+            ...data,
+            expectedEmployedUntilYear: endYear,
+          }),
+        };
+      }),
+    );
+    setState(results);
   }
 
   return (

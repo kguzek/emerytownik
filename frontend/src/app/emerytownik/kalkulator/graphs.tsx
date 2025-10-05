@@ -1,5 +1,6 @@
 import { DataTable } from "@/components/data-table";
 import { Spinner } from "@/components/spinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCalculator } from "@/hooks/use-calculator";
 
 export function Graphs() {
@@ -13,7 +14,23 @@ export function Graphs() {
     </div>
   ) : (
     <div className="bg-gray/20 mx-20 rounded-md p-2">
-      <DataTable data={state} />
+      <Tabs
+        defaultValue={String(Math.min(...state.map((data) => data.endYear)))}
+        className=""
+      >
+        <TabsList>
+          {state.map((data) => (
+            <TabsTrigger key={`tab-${data.endYear}`} value={String(data.endYear)}>
+              Emerytura w roku {data.endYear}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {state.map((data) => (
+          <TabsContent key={`table-${data.endYear}`} value={String(data.endYear)}>
+            <DataTable data={data.data} />
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 }
