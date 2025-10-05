@@ -1,10 +1,16 @@
 import { Navbar } from "@/components/navbar";
+import { API_URL } from "@/config/constants";
 
 import { Panel } from "./panel";
 
 export default async function AdminPage() {
-  const response = await fetch("http://localhost:8000/records");
-  const data = await response.json();
+  let data = [];
+  try {
+    const response = await fetch(`${API_URL}/records`);
+    data = await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 
   return (
     <>
