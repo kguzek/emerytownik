@@ -45,7 +45,7 @@ export function SignIn() {
           }),
         )}
       >
-        Nie jesteś zalogowany 😔
+        Zaloguj się
         <FormField
           control={form.control}
           name="username"
@@ -71,7 +71,7 @@ export function SignIn() {
               <FormLabel />
               <FormControl>
                 <Label className="flex flex-col items-start gap-2">
-                  Nie jesteś zalogowany 😔 asło
+                  Hasło
                   <Input type="password" {...field} />
                 </Label>
               </FormControl>

@@ -34,6 +34,8 @@ export function SidebarForm() {
       nationalRetirementAge: 67,
       savings: 10000,
       allowAbsences: false,
+      postCode: "",
+      ignore: "false",
     },
   });
 
@@ -49,6 +51,7 @@ export function SidebarForm() {
             endYear,
             data: await generateSyntheticData({
               ...data,
+              ignore: offset === 0 ? "false" : "true",
               expectedEmployedUntilYear: endYear,
             }),
           };
@@ -227,6 +230,23 @@ export function SidebarForm() {
                 <Label className="flex items-start gap-2">
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   Uwzględnij możliwość zwolnień lekarskich
+                </Label>
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="postCode"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel />
+              <FormControl>
+                <Label className="flex flex-col items-start gap-2">
+                  Kod pocztowy (opcjonalne)
+                  <Input type="text" maxLength={6} pattern="^\d{2}-\d{3}$" {...field} />
                 </Label>
               </FormControl>
               <FormDescription />

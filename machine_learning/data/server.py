@@ -6,6 +6,14 @@ from generate_synthetic import wylicz_emeryture
 app = Flask(__name__)
 
 
+all_records = []
+
+
+@app.route("/records", methods=["GET"])
+def get_records():
+    return jsonify(all_records), 200
+
+
 @app.route("/calculate", methods=["POST"])
 def calculate():
     try:
@@ -43,6 +51,12 @@ def calculate():
             # suma_wplaconych_skladek=data["totalContributions"]
             absence=data["allowAbsences"],
         )
+
+        if data["ignore"] != "true":
+            record = data.copy()
+            record.update(result)
+            record["generated_at"] = datetime.now().isoformat()
+            all_records.append(record)
 
         return jsonify(result), 200
 

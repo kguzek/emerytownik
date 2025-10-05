@@ -12,6 +12,8 @@ export interface DetailsFormValues {
   nationalRetirementAge: number;
   savings?: number;
   allowAbsences: boolean;
+  postCode?: string;
+  ignore: "true" | "false";
 }
 
 export interface ApiResult {
@@ -25,3 +27,7 @@ export interface ApiResult {
   subkonto: number;
   suma_skladek: number;
 }
+
+export type AdminRecord = ApiResult & {
+  generated_at: string;
+} & DetailsFormValues;

@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ) {
       toast.success("Zalogowano pomyślnie!");
       setUser({ username: values.username });
-      router.push("/");
+      router.push("/emerytownik/admin");
       return;
     }
 
