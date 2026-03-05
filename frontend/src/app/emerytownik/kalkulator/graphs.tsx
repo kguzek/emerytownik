@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { ApiResult, DetailsFormValues } from "@/lib/types";
 import { generateSyntheticData } from "@/app/actions";
@@ -23,28 +23,31 @@ export function Graphs() {
   const [calculatedYears, setCalculatedYears] = useState<number | null>(null);
   const userDetails = details as DetailsFormValues;
 
-  async function calculateYears(data: ApiResult): Promise<void> {
-    for (let diff = 1; diff <= 100; diff++) {
-      let res;
-      try {
-        res = await generateSyntheticData({
-          ...data,
-          targetEmerytura: target,
-          ...userDetails,
-          expectedEmployedUntilYear: userDetails.expectedEmployedUntilYear + diff,
-          ignore: "true",
-        });
+  const calculateYears = useCallback(
+    async (data: ApiResult): Promise<void> => {
+      for (let diff = 1; diff <= 100; diff++) {
+        let res;
+        try {
+          res = await generateSyntheticData({
+            ...data,
+            targetEmerytura: target,
+            ...userDetails,
+            expectedEmployedUntilYear: userDetails.expectedEmployedUntilYear + diff,
+            ignore: "true",
+          });
 
-        if (res.emerytura_nominalna >= target!) {
-          setCalculatedYears(diff);
-          return;
+          if (res.emerytura_nominalna >= target!) {
+            setCalculatedYears(diff);
+            return;
+          }
+        } catch {
+          break;
         }
-      } catch (error) {
-        break;
       }
-    }
-    setCalculatedYears(-1);
-  }
+      setCalculatedYears(-1);
+    },
+    [userDetails, target],
+  );
 
   useEffect(() => {
     setCalculatedYears(null);
@@ -56,7 +59,7 @@ export function Graphs() {
     }
 
     calculateYears(state[0].data);
-  }, [state, calculatedYears]);
+  }, [state, calculatedYears, calculateYears]);
 
   return state === "graph" ? (
     <>
